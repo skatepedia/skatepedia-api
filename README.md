@@ -1,4 +1,4 @@
-# Skatepedia
+# Skatepedia [WORK in PROGRESS]
 
 A REST API for skate scraped data.
 
@@ -6,14 +6,15 @@ A REST API for skate scraped data.
 ## Installation
 
 This project runs an API with acces to the scrapped data. (Django + rest framework + Scrapy)
-
-`pipenv install`
+`python3 -m venv ~//virtualenvs/skatepedia-api/`
+`source ~/.virtualenvs/skatepedia-api/bin/activate/`
+`pip install -r requirements.txt`
 
 
 Run in local:
 
 
-`pipenv shell python manage.py runserver`
+`python manage.py runserver`
 
 
 
@@ -38,4 +39,3 @@ Run in local:
 - https://doc.scrapy.org/
 
 
-Done with <3 for every skate lover
