@@ -1,0 +1,24 @@
+# General
+.DS_Store
+
+# Python
+.ipynb_checkpoints
+*.pyc
+*.prof
+__pycache__
+
+# Editor/IDE
+*~
+\#*\#
+.\#*
+.idea
+
+# Scrapy
+*.json
+.scrapy
+
+# Local development
+db.sqlite3
+
+# Staticfiles
+static

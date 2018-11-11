@@ -1,0 +1,5 @@
+django
+djangorestframework
+scrapy
+dj_database_url
+uwsgi
