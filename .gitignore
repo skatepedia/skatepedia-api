@@ -22,3 +22,7 @@ db.sqlite3
 
 # Staticfiles
 static
+
+# Project specific
+
+skatepedia/db/migrations/
