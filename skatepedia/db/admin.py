@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from skatepedia.db import models
 
-admin.site.register(models.Brand)
+admin.site.register(models.Company)
 admin.site.register(models.Skater)
 admin.site.register(models.Video)
 admin.site.register(models.Person)

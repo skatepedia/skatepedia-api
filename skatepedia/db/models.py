@@ -17,7 +17,7 @@ class Person(models.Model):
     external_uuid = models.CharField(verbose_name=_("external_url"), max_length=128)
 
 
-class Brand(models.Model):
+class Company(models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=128)
     description = models.TextField(verbose_name=_("Description"), max_length=1028)
     logo = models.URLField(verbose_name=_("Logo"), null=True)
@@ -26,7 +26,7 @@ class Brand(models.Model):
     external_uuid = models.CharField(verbose_name=_("External_url"), max_length=128)
 
     skaters = models.ManyToManyField(Skater)
-    similar_brands = models.ManyToManyField("self")
+    similar_companies = models.ManyToManyField("self")
 
 
 class Track(models.Model):
@@ -50,8 +50,8 @@ class Video(models.Model):
     external_uuid = models.CharField(verbose_name=_("external_url"), max_length=128)
 
     director = models.ForeignKey(Person, verbose_name=_("Director"), on_delete=models.PROTECT)
-    brand = models.ForeignKey(Brand, on_delete=models.PROTECT)
-    soundtrack = models.OneToOneField(Soundtrack, on_delete=models.PROTECT)
+    company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True)
+    soundtrack = models.OneToOneField(Soundtrack, on_delete=models.PROTECT, null=True)
     skaters = models.ManyToManyField(Skater)
 
 

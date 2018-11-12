@@ -10,7 +10,7 @@ from scrapy_djangoitem import DjangoItem
 from skatepedia.db.models import (
     Skater,
     Person,
-    Brand,
+    Company,
     Video,
     Clip,
     Soundtrack,
@@ -26,12 +26,12 @@ class PersonItem(DjangoItem):
     django_model = Person
 
 
-class BrandItem(DjangoItem):
-    django_model = Brand
+class CompanyItem(DjangoItem):
+    django_model = Company
 
     videos = scrapy.Field()
     skaters = scrapy.Field()
-    similar_brands = scrapy.Field()
+    similar_companies = scrapy.Field()
     ads = scrapy.Field()
 
 

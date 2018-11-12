@@ -1,11 +1,11 @@
 import scrapy
 
-from scraper.items import BrandItem
+from scraper.items import CompanyItem
 
 
-class BrandSpider(scrapy.Spider):
+class CompanySpider(scrapy.Spider):
     """Parse Skately brand library."""
-    name = "brands"
+    name = "companies"
     pages = range(2,9)
     LIMIT = 1
 
@@ -37,7 +37,7 @@ class BrandSpider(scrapy.Spider):
         http://skately.com/library/brands/blockhead-skateboards-recycled-rubbish.
 
         :param response:
-        :return: BrandItem
+        :return: CompanyItem
         """
         response.selector.remove_namespaces()
         brand_rel = self.parse_brand_links(response)
@@ -50,10 +50,10 @@ class BrandSpider(scrapy.Spider):
             "links": response.css("#lib-page-bio > ul > li > a::attr(href)").extract(),
             "videos": brand_rel["videos"],
             "skaters": brand_rel["people"],
-            "similar_brands": brand_rel["brands"],
+            "similar_companies": brand_rel["brands"],
             "ads": brand_rel["ads"],
         }
-        yield BrandItem(**brand_data)
+        yield CompanyItem(**brand_data)
 
 
     def parse(self, response):

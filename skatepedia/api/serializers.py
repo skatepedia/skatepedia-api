@@ -3,7 +3,7 @@ from rest_framework import serializers
 from skatepedia.db.models import (
     Skater,
     Person,
-    Brand,
+    Company,
     Video,
     Clip,
     Soundtrack,
@@ -28,9 +28,9 @@ class ClipSerializer(serializers.ModelSerializer):
         model = Clip
         fields = '__all__'
 
-class BrandSerializer(serializers.ModelSerializer):
+class CompanySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Brand
+        model = Company
         fields = '__all__'
 
 class SoundtrackSerializer(serializers.ModelSerializer):
