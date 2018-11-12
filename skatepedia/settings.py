@@ -17,7 +17,7 @@ import dj_database_url
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-SKATEPEDIA_API_V1_URL = '/api/v1/'
+SKATEPEDIA_API_V1_URL = 'api/v1/'
 
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 SECRET_KEY = os.environ.get(
