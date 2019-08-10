@@ -1,8 +1,7 @@
-django
-djangorestframework
-scrapy
-scrapy-djangoitem
-dj_database_url
-psycopg2
-psycopg2-binary
-uwsgi
+django==2.2.4
+djangorestframework==3.10.2
+django-environ==0.4.5
+scrapy==1.7.3
+scrapy-djangoitem==1.1.1
+psycopg2-binary==2.8.3
+uwsgi==2.0.18

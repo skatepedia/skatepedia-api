@@ -7,9 +7,9 @@ A REST API for skate scraped data.
 
 This project runs an API with acces to the scrapped data. (Django + rest framework + Scrapy)
 
-`python3 -m venv ~//virtualenvs/skatepedia-api/`
+`python3 -m venv ~/.virtualenvs/skatepedia-api/`
 
-`source ~/.virtualenvs/skatepedia-api/bin/activate/`
+`source ~/.virtualenvs/skatepedia-api/bin/activate`
 
 `pip install -r requirements-dev.txt`
 
