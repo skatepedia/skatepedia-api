@@ -3,23 +3,33 @@
 import re
 
 import scrapy
+import slugify
+from w3lib.html import (
+    remove_tags,
+    replace_escape_chars,
+    strip_html5_whitespace
+)
 from scrapy.loader import ItemLoader
-from scrapy.loader.processors import MapCompose, Compose, TakeFirst
 from scrapy_djangoitem import DjangoItem
+from scrapy.loader.processors import Compose, TakeFirst, MapCompose
 
 from skatepedia.db.models import (
-    Skater,
-    Person,
-    Company,
-    Video,
     Clip,
-    Soundtrack,
     Track,
+    Video,
+    Person,
+    Skater,
+    Company,
+    Soundtrack
 )
 
 
 class SkaterItem(DjangoItem):
     django_model = Skater
+
+    def process(self):
+        """Gets a valid payload for the model"""
+        self._values["slug"] = slugify.slugify(self._values["name"])
 
 
 class PersonItem(DjangoItem):
@@ -66,6 +76,9 @@ class RankItem(scrapy.Item):
 
 class SkaterItemLoader(ItemLoader):
     default_output_processor = TakeFirst()
+    bio_in = MapCompose(strip_html5_whitespace, replace_escape_chars)
+    country_in = MapCompose(strip_html5_whitespace, replace_escape_chars)
+    age_in = MapCompose(int)
 
 
 class VideoItemLoader(ItemLoader):

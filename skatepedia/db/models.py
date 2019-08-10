@@ -1,14 +1,18 @@
-from django.utils.translation import ugettext_lazy as _
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class Skater(models.Model):
-    name = models.CharField(verbose_name=_("Name"), max_length=128)
+    name = models.CharField(verbose_name=_("Name"), max_length=128, unique=True)
+    slug = models.SlugField(verbose_name=_("Slug"), max_length=128, unique=True)
     bio = models.CharField(verbose_name=_("Bio"), max_length=128)
-    age = models.PositiveSmallIntegerField(default=0)
-    style = models.CharField(verbose_name=_("Name"), max_length=128)
+    age = models.PositiveSmallIntegerField(default=0, blank=True)
+    style = models.CharField(verbose_name=_("Style"), max_length=128, blank=True)
     country = models.CharField(verbose_name=_("Country"), max_length=128)
     external_uuid = models.CharField(verbose_name=_("external_url"), max_length=128)
+
+    def __str__(self):
+        return f"{self.name} - {(self.country)}"
 
 
 class Person(models.Model):
@@ -49,7 +53,9 @@ class Video(models.Model):
     year = models.PositiveSmallIntegerField()
     external_uuid = models.CharField(verbose_name=_("external_url"), max_length=128)
 
-    director = models.ForeignKey(Person, verbose_name=_("Director"), on_delete=models.PROTECT)
+    director = models.ForeignKey(
+        Person, verbose_name=_("Director"), on_delete=models.PROTECT
+    )
     company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True)
     soundtrack = models.OneToOneField(Soundtrack, on_delete=models.PROTECT, null=True)
     skaters = models.ManyToManyField(Skater)
@@ -58,5 +64,5 @@ class Video(models.Model):
 class Clip(models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=128)
     thumbnail = models.CharField(verbose_name=_("Clip Thumbnail"), max_length=128)
-    url =  models.CharField(verbose_name=_("Clip URL"), max_length=128)
+    url = models.CharField(verbose_name=_("Clip URL"), max_length=128)
     video = models.ForeignKey(Video, on_delete=models.PROTECT, null=True)

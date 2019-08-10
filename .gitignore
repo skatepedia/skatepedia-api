@@ -26,3 +26,4 @@ static
 # Project specific
 
 skatepedia/db/migrations/
+scraper/exports
