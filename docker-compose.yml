@@ -1,0 +1,9 @@
+version: "3.7"
+services:
+  service:
+    build:
+      context: ./
+    ports:
+      - "9000:9000"
+    env_file:
+      - .env
