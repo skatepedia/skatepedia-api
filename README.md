@@ -9,19 +9,23 @@ This project runs a REST API for skate scraped data.
 
 ## Installation
 
+Requires [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/)
 
-`poetry install`
 
-`python manage.py makemigrations`
+`docker-compose build`
 
-`python manage.py migrate`
 
-`python manage.py runserver`
+`docker-compose up`
 
 
 ## Crawl data
 
 `scrapy crawl <spider_name>`
+
+
+## Debug
+
+`docker-compose run service bash`
 
 
 
