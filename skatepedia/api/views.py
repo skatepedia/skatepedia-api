@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from skatepedia.db.models import (
     Skater,
     Person,
-    Company,
+    Brand,
     Video,
     Clip,
     Soundtrack,
@@ -27,9 +27,9 @@ class ClipViewSet(viewsets.ModelViewSet):
     serializer_class = ClipSerializer
 
 
-class CompanyViewSet(viewsets.ModelViewSet):
-    queryset = Company.objects.all()
-    serializer_class = CompanySerializer
+class BrandViewSet(viewsets.ModelViewSet):
+    queryset = Brand.objects.all()
+    serializer_class = BrandSerializer
 
 
 class SoundtrackViewSet(viewsets.ModelViewSet):

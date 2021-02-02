@@ -10,8 +10,6 @@
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 import os
-import sys
-
 import django
 
 import skatepedia

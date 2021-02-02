@@ -4,14 +4,14 @@ from rest_framework import routers
 
 from skatepedia.api.views import (
     SkaterViewSet,
-    CompanyViewSet,
+    BrandViewSet,
     VideoViewSet,
     SoundtrackViewSet,
 )
 
 router = routers.DefaultRouter()
 router.register(r'skaters', SkaterViewSet)
-router.register(r'companies', CompanyViewSet)
+router.register(r'companies', BrandViewSet)
 router.register(r'videos', VideoViewSet)
 router.register(r'soundtracks', SoundtrackViewSet)
 

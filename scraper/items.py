@@ -19,7 +19,7 @@ from skatepedia.db.models import (
     Video,
     Person,
     Skater,
-    Company,
+    Brand,
     Soundtrack
 )
 
@@ -36,8 +36,8 @@ class PersonItem(DjangoItem):
     django_model = Person
 
 
-class CompanyItem(DjangoItem):
-    django_model = Company
+class BrandItem(DjangoItem):
+    django_model = Brand
 
     videos = scrapy.Field()
     skaters = scrapy.Field()

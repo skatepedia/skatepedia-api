@@ -1,4 +1,4 @@
-"""Django settings for skatepedia project."""
+"""Django settings for Skatepedia."""
 import os
 
 import environ
