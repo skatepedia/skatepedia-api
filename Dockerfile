@@ -18,6 +18,7 @@ COPY skatepedia /app/skatepedia
 
 COPY manage.py /app/
 COPY entrypoint.sh /app/
+COPY scrapy.cfg /app/
 
 
 EXPOSE 9000
