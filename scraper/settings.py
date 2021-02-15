@@ -66,12 +66,13 @@ COOKIES_ENABLED = False
 # DOWNLOADER_MIDDLEWARES = {
 #    'scraper.middlewares.ScrapperDownloaderMiddleware': 543,
 # }
+COMMANDS_MODULE = 'scraper.commands'
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
-# EXTENSIONS = {
-#    'scrapy.extensions.telnet.TelnetConsole': None,
-# }
+EXTENSIONS = {
+#   'scrapy.extensions.telnet.TelnetConsole': None,
+}
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
