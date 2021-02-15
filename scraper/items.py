@@ -3,7 +3,6 @@
 import re
 
 import scrapy
-import slugify
 from w3lib.html import (
     remove_tags,
     replace_escape_chars,
@@ -26,10 +25,6 @@ from skatepedia.db.models import (
 
 class SkaterItem(DjangoItem):
     django_model = Skater
-
-    def process(self):
-        """Gets a valid payload for the model"""
-        self._values["slug"] = slugify.slugify(self._values["name"])
 
 
 class PersonItem(DjangoItem):
@@ -75,7 +70,6 @@ class RankItem(scrapy.Item):
 
 
 class SkaterItemLoader(ItemLoader):
-    default_output_processor = TakeFirst()
     bio_in = MapCompose(strip_html5_whitespace, replace_escape_chars)
     country_in = MapCompose(strip_html5_whitespace, replace_escape_chars)
     age_in = MapCompose(int)

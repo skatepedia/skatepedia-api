@@ -1,7 +1,10 @@
 import string
 import random
 import scrapy
-from scrapy.utils.markup import remove_tags
+from w3lib.html import (
+    remove_tags,
+)
+
 
 from scraper.items import TrackItem, SoundtrackItem
 

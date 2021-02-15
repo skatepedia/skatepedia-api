@@ -4,10 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 
 class Skater(models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=128)
-    slug = models.SlugField(verbose_name=_("Slug"), max_length=128)
     bio = models.CharField(verbose_name=_("Bio"), max_length=128, blank=True)
     age = models.PositiveSmallIntegerField(verbose_name=_("Age"), null=True, blank=True)
     style = models.CharField(verbose_name=_("Style"), max_length=128, blank=True)
+    image = models.URLField(verbose_name=_("Image"), max_length=512, blank=True)
     country = models.CharField(verbose_name=_("Country"), max_length=128)
     external_uuid = models.CharField(verbose_name=_("external_url"), max_length=128)
 
@@ -29,8 +29,8 @@ class Brand(models.Model):
     links = models.TextField(verbose_name=_("Hyperlinks"), max_length=2000)
     external_uuid = models.CharField(verbose_name=_("External_url"), max_length=128)
 
-    members = models.CharField(verbose_name=_("Members"), blank=True)
-    similar_brands = models.CharField(verbose_name=_("Related Brands"), blank=True)
+    members = models.CharField(verbose_name=_("Members"), max_length=1024, blank=True)
+    similar_brands = models.CharField(verbose_name=_("Related Brands"), max_length=1024,  blank=True)
 
 
 class Track(models.Model):
@@ -53,14 +53,14 @@ class Video(models.Model):
     year = models.PositiveSmallIntegerField(null=True)
     external_uuid = models.CharField(verbose_name=_("external_url"), max_length=128)
 
-    director = models.CharField(verbose_name=_("Director"))
-    brand = models.CharField(verbose_name=_("Brand"));
-    soundtrack = models.CharField(verbose_name=_("Soundtrack"));
-    skaters = models.CharField(verbose_name=_("Skaters"))
+    director = models.CharField(verbose_name=_("Director"), max_length=512)
+    brand = models.CharField(verbose_name=_("Brand"), max_length=512);
+    soundtrack = models.CharField(verbose_name=_("Soundtrack"), max_length=512);
+    skaters = models.CharField(verbose_name=_("Skaters"), max_length=512)
 
 
 class Clip(models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=128)
     thumbnail = models.CharField(verbose_name=_("Clip Thumbnail"), max_length=128)
     url = models.CharField(verbose_name=_("Clip URL"), max_length=128)
-    video = models.CharField(verbose_name=_("Video"))
+    video = models.CharField(verbose_name=_("Video"), max_length=512)

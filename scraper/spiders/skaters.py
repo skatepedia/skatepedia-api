@@ -1,41 +1,28 @@
-import string
+import json
 
-import scrapy
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
 
-from scraper.items import SkaterItem, SkaterItemLoader
+from scraper.items import SkaterItem
 
 
-class SkaterSpider(scrapy.Spider):
-    name = "skaters"
-    profile_selector = {
-        "name": "body > div.site-wrap > div.middle-wrapper > div > div.row.well > div:nth-child(2) > h1::text",
-        "country": "body > div.site-wrap > div.middle-wrapper > div > div.row.well > div:nth-child(2) > p > a:nth-child(2)::text",
-        "bio": "body > div.site-wrap > div.middle-wrapper > div > div.row.well > div:nth-child(2) > p::text",
-    }
-    LIMIT = 1
+class SkaterSpider(CrawlSpider):
+    name = 'skaters'
+    start_urls = ['https://theboardr.com/skaters']
+    rules = (
+        Rule(LinkExtractor(allow=("profile/\d+/\w+")), callback='parse_item'),
+    )
 
-    def start_requests(self):
-        urls = [
-            f"https://theboardr.com/skateboarders_list/{letter}"
-            for letter in string.ascii_uppercase
-        ]
-        for url in urls[: self.LIMIT]:
-            yield scrapy.Request(url=url, callback=self.parse)
+    def parse_item(self, response):
+        script_data = response.css("#__NEXT_DATA__::text")[0]
+        data = json.loads(script_data.extract())
+        skater_info = data['props']['pageProps']['skaterDetails'][0]
 
-    def parse_skater_page(self, response):
-        loader = SkaterItemLoader(item=SkaterItem(), response=response)
-        loader.add_css("name", self.profile_selector["name"])
-        loader.add_css("bio", self.profile_selector["bio"])
-        loader.add_css("age", self.profile_selector["bio"], re=r"\d+")
-        loader.add_css("style", self.profile_selector["bio"], re=r"Regular|Goofy")
-        loader.add_css("country", self.profile_selector["country"])
-        loader.add_value("external_uuid", response.request.url)
-
-        yield loader.load_item()
-
-    def parse(self, response):
-        profile_links = response.css(
-            "#cphMain_pnlList > div > div > a::attr(href)"
-        ).extract()
-        for profile_link in profile_links[: self.LIMIT]:
-            yield response.follow(profile_link, self.parse_skater_page)
+        yield SkaterItem({
+            "name": f"{skater_info['FirstName']} {skater_info['LastName']}",
+            "age": skater_info.get('Age'),
+            "image": skater_info.get('Mug'),
+            "style": skater_info.get('Stance'),
+            "country": skater_info.get('CountryCode', '').lower(),
+            "external_uuid": response.request.url
+        })
