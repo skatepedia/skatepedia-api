@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 # https://doc.scrapy.org/en/latest/topics/items.html
-import re
-
 import scrapy
 from w3lib.html import (
     remove_tags,
@@ -42,11 +40,6 @@ class BrandItem(DjangoItem):
 
 class VideoItem(DjangoItem):
     django_model = Video
-    clips = scrapy.Field()
-    brand = scrapy.Field()
-    soundtrack = scrapy.Field()
-    director = scrapy.Field()
-    skaters = scrapy.Field()
 
 
 class ClipItem(DjangoItem):
@@ -76,4 +69,6 @@ class SkaterItemLoader(ItemLoader):
 
 
 class VideoItemLoader(ItemLoader):
+    default_input_processor = MapCompose(str.strip)
     default_output_processor = TakeFirst()
+    year_in = MapCompose(int)

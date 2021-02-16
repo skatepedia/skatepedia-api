@@ -46,17 +46,20 @@ class Soundtrack(models.Model):
 
 
 class Video(models.Model):
-    name = models.CharField(verbose_name=_("Name"), max_length=128)
-    description = models.CharField(verbose_name=_("description"), max_length=1028)
-    image = models.URLField(verbose_name=_("Video Poster"), null=True)
-    runtime = models.PositiveSmallIntegerField(null=True)
-    year = models.PositiveSmallIntegerField(null=True)
+    name = models.CharField(verbose_name=_("Name"), max_length=128, blank=True, null=True)
+
+    country = models.CharField(verbose_name=_("Country"), max_length=128, blank=True, null=True)
+    description = models.CharField(verbose_name=_("description"), max_length=1028, blank=True, null=True)
+    image = models.URLField(verbose_name=_("Video Poster"), null=True, blank=True)
+    runtime = models.PositiveSmallIntegerField(null=True, blank=True)
+    year = models.PositiveSmallIntegerField(null=True, blank=True)
+    category = models.CharField(verbose_name=_("Category"), max_length=24, blank=True, null=True)
     external_uuid = models.CharField(verbose_name=_("external_url"), max_length=128)
 
-    director = models.CharField(verbose_name=_("Director"), max_length=512)
-    brand = models.CharField(verbose_name=_("Brand"), max_length=512);
-    soundtrack = models.CharField(verbose_name=_("Soundtrack"), max_length=512);
-    skaters = models.CharField(verbose_name=_("Skaters"), max_length=512)
+    director = models.CharField(verbose_name=_("Director"), max_length=1024, blank=True, null=True)
+    brand = models.CharField(verbose_name=_("Brand"), max_length=512, blank=True, null=True);
+    soundtrack = models.CharField(verbose_name=_("Soundtrack"), max_length=2056, blank=True, null=True);
+    skaters = models.CharField(verbose_name=_("Skaters"), max_length=2056, blank=True, null=True)
 
 
 class Clip(models.Model):

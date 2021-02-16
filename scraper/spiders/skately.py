@@ -1,4 +1,3 @@
-import json
 import scrapy
 
 from scraper.items import (
@@ -15,7 +14,7 @@ SKATELY_VIDEO_LIBRARY_URL = "http://skately.com/library/videos"
 
 class VideoSpider(scrapy.Spider):
     """Parse Skately video library and extract movies information."""
-    name = "videos"
+    name = "skately"
     LIMIT = 1
 
     def start_requests(self):
