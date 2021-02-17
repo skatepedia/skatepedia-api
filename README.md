@@ -31,14 +31,17 @@ Requires [Docker](https://www.docker.com/) and [docker-compose](https://docs.doc
 
 ## Data Resources
 
-- http://skately.com/
+### Skate Data
+
 - https://theboardr.com/
-- http://www.skatevideosite.com/skatevideos
+- http://www.skatevideosite.com
 - http://freestylekb.com/wiki/index.php?title=Main_Page
 
+Need to contact: http://skately.com
 
 ## Tech Resources
 
-- https://devhints.io/xpath
-- https://docs.djangoproject.com/
-- https://doc.scrapy.org/
+- [Scrapy](https://doc.scrapy.org/)
+- [Django](https://docs.djangoproject.com/)
+- [Xpath](https://devhints.io/xpath)
+- [HEP](https://pythonhosted.org/hepcrawl/index.html)
