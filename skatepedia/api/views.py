@@ -8,9 +8,14 @@ from skatepedia.db.models import (
     Clip,
     Soundtrack,
     Track,
+    RSSFeed,
 )
 from skatepedia.api.serializers import *
 
+
+class RSSFeedViewSet(viewsets.ModelViewSet):
+    queryset = RSSFeed.objects.all()
+    serializer_class = RSSFeedSerializer
 
 class SkaterViewSet(viewsets.ModelViewSet):
     queryset = Skater.objects.all()

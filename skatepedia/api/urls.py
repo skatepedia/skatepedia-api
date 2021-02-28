@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework import routers
 
 from skatepedia.api.views import (
+    RSSFeedViewSet,
     SkaterViewSet,
     BrandViewSet,
     VideoViewSet,
@@ -10,6 +11,7 @@ from skatepedia.api.views import (
 )
 
 router = routers.DefaultRouter()
+router.register(r'feeds', RSSFeedViewSet)
 router.register(r'skaters', SkaterViewSet)
 router.register(r'companies', BrandViewSet)
 router.register(r'videos', VideoViewSet)

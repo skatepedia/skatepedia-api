@@ -8,7 +8,13 @@ from skatepedia.db.models import (
     Clip,
     Soundtrack,
     Track,
+    RSSFeed,
 )
+
+class RSSFeedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RSSFeed
+        fields = '__all__'
 
 
 class SkaterSerializer(serializers.ModelSerializer):

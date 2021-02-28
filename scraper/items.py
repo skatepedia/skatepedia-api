@@ -8,7 +8,7 @@ from w3lib.html import (
 )
 from scrapy.loader import ItemLoader
 from scrapy_djangoitem import DjangoItem
-from scrapy.loader.processors import Compose, TakeFirst, MapCompose
+from scrapy.loader.processors import TakeFirst, MapCompose
 
 from skatepedia.db.models import (
     Clip,
@@ -17,7 +17,9 @@ from skatepedia.db.models import (
     Person,
     Skater,
     Brand,
-    Soundtrack
+    Soundtrack,
+    RSSFeed,
+    RSSItem
 )
 
 
@@ -60,6 +62,21 @@ class RankItem(scrapy.Item):
     position = scrapy.Field()
     points = scrapy.Field()
     skater = scrapy.Field()
+
+
+class RSSFeedItem(DjangoItem):
+    django_model = RSSFeed
+
+
+class RSSParsedItem(DjangoItem):
+    django_model = RSSItem
+
+
+class RSSItemLoader(ItemLoader):
+    default_input_processor = MapCompose(str.strip)
+    default_output_processor = TakeFirst()
+    feed_in = TakeFirst()
+    category_out = MapCompose()
 
 
 class SkaterItemLoader(ItemLoader):

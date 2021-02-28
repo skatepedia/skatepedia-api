@@ -2,13 +2,32 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
+class RSSFeed(models.Model):
+    title = models.TextField(verbose_name=_("Title"), max_length=256)
+    link = models.URLField(verbose_name=_("Link"), max_length=1024)
+    description = models.CharField(verbose_name=_("Description"), null=True, max_length=1024, blank=True)
+    image = models.URLField(verbose_name=_("Image"), max_length=1024, null=True)
+    language = models.CharField(verbose_name=_("Language"), max_length=128, blank=True)
+    feed_url = models.URLField(verbose_name=_("Feed url"), unique=True)
+
+
+class RSSItem(models.Model):
+    title = models.TextField(verbose_name=_("Title"), max_length=256)
+    link = models.URLField(verbose_name=_("Link"), max_length=1024)
+    description = models.CharField(verbose_name=_("Description"), null=True, max_length=1024, blank=True)
+    published_at = models.CharField(verbose_name=_("Published at"), max_length=128)
+    categories = models.CharField(verbose_name=_("Categories"), null=True, max_length=128, blank=True)
+    creator = models.CharField(verbose_name=_("Creator"), max_length=128, blank=True)
+    feed = models.ForeignKey(RSSFeed, null=True, on_delete=models.PROTECT)
+
+
 class Skater(models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=128)
     bio = models.CharField(verbose_name=_("Bio"), max_length=128, blank=True)
     age = models.PositiveSmallIntegerField(verbose_name=_("Age"), null=True, blank=True)
     style = models.CharField(verbose_name=_("Style"), max_length=128, blank=True)
     image = models.URLField(verbose_name=_("Image"), max_length=512, blank=True)
-    country = models.CharField(verbose_name=_("Country"), max_length=128)
+    country = models.CharField(verbose_name=_("Country"), max_length=128, blank=True)
     external_uuid = models.CharField(verbose_name=_("external_url"), max_length=128)
 
     def __str__(self):
