@@ -1,25 +1,25 @@
 from rest_framework import viewsets
 
 from skatepedia.db.models import (
-    Skater,
-    Person,
-    Brand,
-    Video,
     Clip,
-    Soundtrack,
     Track,
-    RSSFeed,
+    Video,
+    Skater,
+    Company,
+    Filmmaker,
+    Soundtrack
 )
 from skatepedia.api.serializers import *
 
 
-class RSSFeedViewSet(viewsets.ModelViewSet):
-    queryset = RSSFeed.objects.all()
-    serializer_class = RSSFeedSerializer
-
 class SkaterViewSet(viewsets.ModelViewSet):
     queryset = Skater.objects.all()
     serializer_class = SkaterSerializer
+
+
+class FilmmakerViewSet(viewsets.ModelViewSet):
+    queryset = Filmmaker.objects.all()
+    serializer_class = FilmmakerSerializer
 
 
 class VideoViewSet(viewsets.ModelViewSet):
@@ -27,14 +27,19 @@ class VideoViewSet(viewsets.ModelViewSet):
     serializer_class = VideoSerializer
 
 
+class VideoCategoryViewSet(viewsets.ModelViewSet):
+    queryset = VideoCategory.objects.all()
+    serializer_class = VideoCategorySerializer
+
+
 class ClipViewSet(viewsets.ModelViewSet):
     queryset = Clip.objects.all()
     serializer_class = ClipSerializer
 
 
-class BrandViewSet(viewsets.ModelViewSet):
-    queryset = Brand.objects.all()
-    serializer_class = BrandSerializer
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
 
 
 class SoundtrackViewSet(viewsets.ModelViewSet):

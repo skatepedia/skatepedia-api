@@ -1,25 +1,27 @@
-from django.conf.urls import url, include
-from django.contrib.auth.models import User
 from rest_framework import routers
 
+from django.urls import path, include
+
 from skatepedia.api.views import (
-    RSSFeedViewSet,
-    SkaterViewSet,
-    BrandViewSet,
     VideoViewSet,
+    SkaterViewSet,
+    CompanyViewSet,
+    FilmmakerViewSet,
     SoundtrackViewSet,
+    VideoCategoryViewSet
 )
 
 router = routers.DefaultRouter()
-router.register(r'feeds', RSSFeedViewSet)
-router.register(r'skaters', SkaterViewSet)
-router.register(r'companies', BrandViewSet)
-router.register(r'videos', VideoViewSet)
-router.register(r'soundtracks', SoundtrackViewSet)
+router.register(r"skaters", SkaterViewSet)
+router.register(r"filmmakers", FilmmakerViewSet)
+router.register(r"companies", CompanyViewSet)
+router.register(r"videos", VideoViewSet)
+router.register(r"videocategories", VideoCategoryViewSet)
+router.register(r"soundtracks", SoundtrackViewSet)
 
-app_name = 'api'
+app_name = "api"
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(r'^auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path(r"", include(router.urls)),
+    path(r"auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]

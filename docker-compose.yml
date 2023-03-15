@@ -9,3 +9,14 @@ services:
       - .env
     volumes:
       - .:/app
+    depends_on:
+      - database
+
+  database:
+    image: 'postgres:latest'
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - ./db_data/:/var/lib/postgresql/data/

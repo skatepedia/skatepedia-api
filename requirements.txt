@@ -1,0 +1,7 @@
+Django==4.1.7
+django-environ==0.10.0
+djangorestframework==3.14.0
+Scrapy==2.8.0
+scrapy-djangoitem==1.1.1
+python-slugify
+psycopg2-binary==2.9.5

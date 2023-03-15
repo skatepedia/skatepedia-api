@@ -1,50 +1,60 @@
 from rest_framework import serializers
 
 from skatepedia.db.models import (
-    Skater,
-    Person,
-    Brand,
-    Video,
     Clip,
-    Soundtrack,
     Track,
-    RSSFeed,
+    Video,
+    Skater,
+    Company,
+    Filmmaker,
+    Soundtrack,
+    VideoCategory
 )
-
-class RSSFeedSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RSSFeed
-        fields = '__all__'
 
 
 class SkaterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skater
-        fields = '__all__'
+        fields = "__all__"
+
+
+class FilmmakerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Filmmaker
+        fields = "__all__"
 
 
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        fields = '__all__'
+        fields = "__all__"
+
+
+class VideoCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoCategory
+        fields = "__all__"
 
 
 class ClipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Clip
-        fields = '__all__'
+        fields = "__all__"
 
-class BrandSerializer(serializers.ModelSerializer):
+
+class CompanySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Brand
-        fields = '__all__'
+        model = Company
+        fields = "__all__"
+
 
 class SoundtrackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Soundtrack
-        fields = '__all__'
+        fields = "__all__"
+
 
 class TrackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Track
-        fields = '__all__'
+        fields = "__all__"

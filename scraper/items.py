@@ -14,12 +14,10 @@ from skatepedia.db.models import (
     Clip,
     Track,
     Video,
-    Person,
     Skater,
-    Brand,
-    Soundtrack,
-    RSSFeed,
-    RSSItem
+    Company,
+    Filmmaker,
+    Soundtrack
 )
 
 
@@ -27,12 +25,12 @@ class SkaterItem(DjangoItem):
     django_model = Skater
 
 
-class PersonItem(DjangoItem):
-    django_model = Person
+class FilmmakerItem(DjangoItem):
+    django_model = Filmmaker
 
 
-class BrandItem(DjangoItem):
-    django_model = Brand
+class CompanyItem(DjangoItem):
+    django_model = Company
 
     videos = scrapy.Field()
     skaters = scrapy.Field()
@@ -62,21 +60,6 @@ class RankItem(scrapy.Item):
     position = scrapy.Field()
     points = scrapy.Field()
     skater = scrapy.Field()
-
-
-class RSSFeedItem(DjangoItem):
-    django_model = RSSFeed
-
-
-class RSSParsedItem(DjangoItem):
-    django_model = RSSItem
-
-
-class RSSItemLoader(ItemLoader):
-    default_input_processor = MapCompose(str.strip)
-    default_output_processor = TakeFirst()
-    feed_in = TakeFirst()
-    category_out = MapCompose()
 
 
 class SkaterItemLoader(ItemLoader):

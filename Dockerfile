@@ -1,17 +1,10 @@
-FROM python:3.8
-
-ENV POETRY_VERSION=1.1.4
-
-RUN apt-get update && apt-get install -y --no-install-recommends git curl
-
-RUN pip install poetry=="$POETRY_VERSION"
+FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY poetry.lock pyproject.toml /app/
-
-RUN poetry config virtualenvs.create false \
-  && poetry install --no-interaction --no-ansi
+COPY requirements-dev.txt requirements-dev.txt
+COPY requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements-dev.txt
 
 COPY scraper /app/scraper
 COPY skatepedia /app/skatepedia

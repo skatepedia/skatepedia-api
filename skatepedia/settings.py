@@ -1,18 +1,19 @@
-"""Django settings for Skatepedia."""
+"""Django settings for skatepedia project."""
 import os
+from pathlib import Path
 
 import environ
 
-# Environment loading
-env = environ.Env()
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Environment loading
+env = environ.Env(DEBUG=(bool, False))
+
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SKATEPEDIA_API_V1_URL = "api/v1/"
 
-# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 SECRET_KEY = env.str("SECRET_KEY", "*um3tpd8_1e0z*ifet+m!w!e$fbdfobgc3_9q603&r)oc8-0zc")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -64,7 +65,6 @@ WSGI_APPLICATION = "skatepedia.wsgi.application"
 
 
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -72,25 +72,29 @@ DATABASES = {
     }
 }
 
-if "DATABASE_URL" in os.environ:
-    DATABASES = {"default": env.db()}
+if database_url := env.db():
+    DATABASES = {"default": database_url}
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Password validation
-# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
 ]
-
-
 # Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
@@ -103,10 +107,8 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
 STATIC_URL = env.str("STATIC_URL", default="/static/")
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,

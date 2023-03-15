@@ -1,37 +1,38 @@
-# Skatepedia [WORK in PROGRESS]
+# Skatepedia
 
 
+> **Warning**
+>
+> **WORK in PROGRESS**
 
-This project runs a REST API for skate scraped data.
+This project runs a REST API for skate scraped Quickstart.
 
-(Django + rest framework + Scrapy)
-
-
-## Installation
+### Installation
 
 Requires [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/)
 
 
 `docker-compose build`
 
-
 `docker-compose up`
 
+### Crawl data
 
-## Crawl data
+`docker-compose run service scrapy crawl <spider_name>`
 
-`scrapy crawl <spider_name>`
-
-
-## Debug
+### Debug
 
 `docker-compose run service bash`
 
+### Configuration
 
+All the environment configuration variables should be stored in the .env file.
 
 ## Data Resources
 
 ### Skate Data
+
+Huge thanks to everyone in the skateboarding community for contribuiting with public data.
 
 - https://theboardr.com/
 - http://www.skatevideosite.com
@@ -41,7 +42,7 @@ Need to contact: http://skately.com
 
 ## Tech Resources
 
-- [Scrapy](https://doc.scrapy.org/)
 - [Django](https://docs.djangoproject.com/)
+- [Scrapy](https://doc.scrapy.org/)
 - [Xpath](https://devhints.io/xpath)
 - [HEP](https://pythonhosted.org/hepcrawl/index.html)
