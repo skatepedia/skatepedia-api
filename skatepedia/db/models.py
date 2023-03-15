@@ -1,9 +1,22 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 
-class Person(models.Model):
+class BaseModel:
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(blank=True)
+    updated_by = models.ForeignKey(
+        get_user_model(), on_delete=models.PROTECT, null=True
+    )
+    skatevideosite_id = models.PositiveIntegerField(
+        verbose_name=_("external_id"), unique=True
+    )
+
+
+class Person(BaseModel, models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=128, unique=True)
     image = models.CharField(verbose_name=_("Profile picture"), max_length=128)
     bio = models.CharField(verbose_name=_("Bio"), max_length=128)
@@ -11,7 +24,6 @@ class Person(models.Model):
         "birthday year", default=0, blank=True
     )
     country = models.CharField(verbose_name=_("Country"), max_length=128)
-    external_uuid = models.CharField(verbose_name=_("external_url"), max_length=128)
 
     class Meta:
         abstract = True
@@ -21,7 +33,7 @@ class Person(models.Model):
 
     @property
     def age(self):
-        return datetime.now().year - year_of_birth
+        return datetime.now().year - self.year_of_birth
 
 
 class Filmmaker(Person):
@@ -32,7 +44,7 @@ class Skater(Person):
     stance = models.CharField(verbose_name=_("Stance"), max_length=128, blank=True)
 
 
-class Company(models.Model):
+class Company(BaseModel, models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=128)
     description = models.TextField(verbose_name=_("Description"), max_length=1028)
     logo = models.URLField(verbose_name=_("Logo"), null=True)
@@ -47,15 +59,14 @@ class Company(models.Model):
         verbose_name_plural = _("Companies")
 
 
-class VideoCategory(models.Model):
+class VideoCategory(BaseModel, models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=128, unique=True)
 
     class Meta:
         verbose_name_plural = _("Video Categories")
 
 
-# Category, Filmmaker, Skater, Company,
-class Video(models.Model):
+class Video(BaseModel, models.Model):
     title = models.CharField(verbose_name=_("Title"), max_length=128)
     description = models.CharField(verbose_name=_("Description"), max_length=1028)
     slug = models.CharField(verbose_name=_("Slug"), max_length=128, unique=True)
@@ -80,27 +91,22 @@ class Video(models.Model):
     )
     company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True)
     soundtracks = models.JSONField(blank=True)  # TODO:mgr move to Soundtrack
-    created_at = models.DateTimeField(blank=True)
-    updated_at = models.DateTimeField(blank=True)
-    updated_by = models.ForeignKey(
-        get_user_model(), on_delete=models.PROTECT, null=True
-    )
     # cids = models.JSONField(verbose_name="List of IPFS CIDs", blank=True)
 
 
-class Track(models.Model):
+class Track(BaseModel, models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=128)
     artist = models.CharField(verbose_name=_("Artist"), max_length=128)
     links = models.JSONField(verbose_name=_("URLs"), max_length=128)
 
 
-class Soundtrack(models.Model):
+class Soundtrack(BaseModel, models.Model):
     name = models.CharField(verbose_name=_("Name"), max_length=128)
     tracks = models.ManyToManyField(Track)
     video = models.OneToOneField(Video, on_delete=models.PROTECT)
 
 
-class Clip(models.Model):
+class Clip(BaseModel, models.Model):
     """Skater video part or any specific video clip"""
 
     thumbnail = models.URLField(
