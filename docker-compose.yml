@@ -10,7 +10,8 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - database
+      database:
+        condition: service_started
 
   database:
     image: 'postgres:latest'

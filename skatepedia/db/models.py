@@ -1,13 +1,16 @@
+import uuid
 from datetime import datetime
 
 from django.db import models
+from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
 
-class BaseModel:
+class BaseModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(blank=True)
+    updated_at = models.DateTimeField(blank=True, auto_now=True)
     updated_by = models.ForeignKey(
         get_user_model(), on_delete=models.PROTECT, null=True
     )
@@ -15,8 +18,11 @@ class BaseModel:
         verbose_name=_("external_id"), unique=True
     )
 
+    class Meta:
+        abstract = True
 
-class Person(BaseModel, models.Model):
+
+class Person(BaseModel):
     name = models.CharField(verbose_name=_("Name"), max_length=128, unique=True)
     image = models.CharField(verbose_name=_("Profile picture"), max_length=128)
     bio = models.CharField(verbose_name=_("Bio"), max_length=128)
@@ -44,7 +50,7 @@ class Skater(Person):
     stance = models.CharField(verbose_name=_("Stance"), max_length=128, blank=True)
 
 
-class Company(BaseModel, models.Model):
+class Company(BaseModel):
     name = models.CharField(verbose_name=_("Name"), max_length=128)
     description = models.TextField(verbose_name=_("Description"), max_length=1028)
     logo = models.URLField(verbose_name=_("Logo"), null=True)
@@ -59,54 +65,56 @@ class Company(BaseModel, models.Model):
         verbose_name_plural = _("Companies")
 
 
-class VideoCategory(BaseModel, models.Model):
+class VideoCategory(BaseModel):
     name = models.CharField(verbose_name=_("Name"), max_length=128, unique=True)
 
     class Meta:
         verbose_name_plural = _("Video Categories")
 
 
-class Video(BaseModel, models.Model):
+class Video(BaseModel):
     title = models.CharField(verbose_name=_("Title"), max_length=128)
-    description = models.CharField(verbose_name=_("Description"), max_length=1028)
     slug = models.CharField(verbose_name=_("Slug"), max_length=128, unique=True)
-    date = models.DateTimeField(blank=True)
-
-    is_active = models.BooleanField(default=True)
+    description = models.TextField(verbose_name=_("Description"), blank=True, null=True)
+    date = models.DateTimeField(blank=True, null=True)
     image = models.URLField(verbose_name=_("Video Poster"), null=True)
-    runtime = models.PositiveSmallIntegerField()
-    year = models.PositiveSmallIntegerField()
+    runtime = models.PositiveSmallIntegerField(null=True)
+    year = models.PositiveSmallIntegerField(null=True)
     trailer = models.URLField(verbose_name=_("Trailer Link"), null=True)
     videolink = models.URLField(verbose_name=_("Video Link"), null=True)
-    external_url = models.CharField(
-        verbose_name=_("external_url"), max_length=128, unique=True
-    )
-    links = models.JSONField(blank=True, verbose_name=_("Video Links"))
+    external_url = models.CharField(verbose_name=_("external_url"), max_length=128)
+    links = models.JSONField(blank=True, verbose_name=_("Video Links"), null=True)
+    is_active = models.BooleanField(default=True)
 
-    categories = models.ForeignKey(VideoCategory, on_delete=models.PROTECT, null=True)
+    category = models.ForeignKey(VideoCategory, on_delete=models.PROTECT, null=True)
+    company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True)
     skaters = models.ManyToManyField(Skater)
     filmmakers = models.ManyToManyField(
         Filmmaker,
         verbose_name=_("Filmmakers"),
     )
-    company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True)
-    soundtracks = models.JSONField(blank=True)  # TODO:mgr move to Soundtrack
+    soundtracks = models.JSONField(blank=True, null=True)  # TODO:mgr move to Soundtrack
     # cids = models.JSONField(verbose_name="List of IPFS CIDs", blank=True)
 
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
-class Track(BaseModel, models.Model):
+
+class Track(BaseModel):
     name = models.CharField(verbose_name=_("Name"), max_length=128)
     artist = models.CharField(verbose_name=_("Artist"), max_length=128)
     links = models.JSONField(verbose_name=_("URLs"), max_length=128)
 
 
-class Soundtrack(BaseModel, models.Model):
+class Soundtrack(BaseModel):
     name = models.CharField(verbose_name=_("Name"), max_length=128)
     tracks = models.ManyToManyField(Track)
     video = models.OneToOneField(Video, on_delete=models.PROTECT)
 
 
-class Clip(BaseModel, models.Model):
+class Clip(BaseModel):
     """Skater video part or any specific video clip"""
 
     thumbnail = models.URLField(

@@ -29,7 +29,7 @@ The `docker-compose` file defines two services:
 
 The `.env` file should be the main  configuration file for all the services.
 
-### Database, Debugging and other configurations
+### Database Configuration
 
 For debugging purposes or to trigger django-admin commands, with both services running, open a bash session in the service container.
 
@@ -38,6 +38,18 @@ For debugging purposes or to trigger django-admin commands, with both services r
 **Run this once**  Configure superuser for [Django's Admin Site](http://localhost:9000/admin)
 
 `python manage createsuper user`
+
+### Debugging and other configurations
+
+Database introspection:
+
+Open a `psql` :
+
+    `docker-compose exec database psql -d skatepedia -U admin`
+
+Open a Django shell or run any other django-admin commands.
+
+`docker-compose run service python manage.py shell`
 
 
 ### Crawl data
