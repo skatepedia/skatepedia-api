@@ -1,4 +1,5 @@
 from rest_framework import routers
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from django.urls import path, include
 
@@ -23,5 +24,11 @@ app_name = "api"
 
 urlpatterns = [
     path(r"", include(router.urls)),
-    path(r"auth/", include("rest_framework.urls", namespace="rest_framework")),
+    # OpenAPI schema serving and Swagger UI
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "schema/swagger-ui/",
+        SpectacularSwaggerView.as_view(url_name="api:schema"),
+        name="swagger-ui",
+    ),
 ]
