@@ -1,3 +1,4 @@
+import django_filters.rest_framework
 from rest_framework import viewsets
 
 from skatepedia.db.models import (
@@ -25,6 +26,8 @@ class FilmmakerViewSet(viewsets.ModelViewSet):
 class VideoViewSet(viewsets.ModelViewSet):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = ["year", "runtime", "company", "skaters", "filmmakers"]
 
 
 class VideoCategoryViewSet(viewsets.ModelViewSet):

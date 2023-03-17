@@ -1,4 +1,7 @@
+# git+https://${GITHUB_TOKEN}@github.com/skatepedia/skatepedia_db.git@master
 Django==4.1.7
+django-filter
+drf-nested-routers
 django-environ==0.10.0
 djangorestframework==3.14.0
 drf-spectacular[sidecar]
