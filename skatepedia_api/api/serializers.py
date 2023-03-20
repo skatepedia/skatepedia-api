@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from skatepedia.db.models import (
+from skatepedia_db.db.models import (
     Clip,
     Track,
     Video,

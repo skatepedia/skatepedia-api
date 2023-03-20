@@ -10,7 +10,7 @@ from scrapy.loader import ItemLoader
 from scrapy_djangoitem import DjangoItem
 from scrapy.loader.processors import TakeFirst, MapCompose
 
-from skatepedia.db.models import (
+from skatepedia_db.db.models import (
     Clip,
     Track,
     Video,

@@ -4,7 +4,7 @@ from rest_framework_nested.routers import NestedSimpleRouter
 
 from django.urls import path, include
 
-from skatepedia.api.views import (
+from skatepedia_api.api.views import (
     VideoViewSet,
     SkaterViewSet,
     CompanyViewSet,

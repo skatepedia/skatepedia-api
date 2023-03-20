@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class SkateDatabaseConfig(AppConfig):
-    name = "skatepedia.db"
+    name = "skatepedia_api.api"

@@ -10,11 +10,12 @@
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 import os
-import django
 
 import skatepedia
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "skatepedia.settings"
+import django
+
+os.environ["DJANGO_SETTINGS_MODULE"] = "skatepedia_api.settings"
 
 
 django.setup()
@@ -66,12 +67,12 @@ COOKIES_ENABLED = False
 # DOWNLOADER_MIDDLEWARES = {
 #    'scraper.middlewares.ScrapperDownloaderMiddleware': 543,
 # }
-COMMANDS_MODULE = 'scraper.commands'
+COMMANDS_MODULE = "scraper.commands"
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
 EXTENSIONS = {
-#   'scrapy.extensions.telnet.TelnetConsole': None,
+    #   'scrapy.extensions.telnet.TelnetConsole': None,
 }
 
 # Configure item pipelines

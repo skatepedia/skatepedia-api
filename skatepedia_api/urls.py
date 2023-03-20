@@ -10,6 +10,7 @@ urlpatterns = [
     # path(f"{settings.SKATEPEDIA_API_V1_URL}auth/",
     #      include("rest_framework.urls", namespace="rest_framework")),
     path(
-        settings.SKATEPEDIA_API_V1_URL, include("skatepedia.api.urls", namespace="api")
+        settings.SKATEPEDIA_API_V1_URL,
+        include("skatepedia_api.api.urls", namespace="api"),
     ),
 ]

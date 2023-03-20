@@ -1,7 +1,7 @@
 import django_filters.rest_framework
 from rest_framework import viewsets
 
-from skatepedia.db.models import (
+from skatepedia_db.db.models import (
     Clip,
     Track,
     Video,
@@ -10,7 +10,7 @@ from skatepedia.db.models import (
     Filmmaker,
     Soundtrack
 )
-from skatepedia.api.serializers import *
+from skatepedia_api.api.serializers import *
 
 
 class SkaterViewSet(viewsets.ModelViewSet):

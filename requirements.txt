@@ -1,4 +1,4 @@
-# git+https://${GITHUB_TOKEN}@github.com/skatepedia/skatepedia_db.git@master
+git+https://github.com/skatepedia/skatepedia-db#main
 Django==4.1.7
 django-filter
 drf-nested-routers

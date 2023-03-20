@@ -8,12 +8,14 @@
 This project runs an skateboarding REST API.
 Uses: Django + DRF + Postgresql and Scrapy
 
-## Quickstart.
+## Why ?
+
+
+## Quickstart
 
 ### Installation
 
-Requires [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/)
-
+Running this project requirese [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/)
 
 `docker-compose build`
 
@@ -25,7 +27,7 @@ The `docker-compose` file defines two services:
 
 - service:  django project with an API exposed in <a href="http://localhost:9000"> `http://localhost:9000`</a>
 
-    When running, migrations are checked and executed before running the wsgi server.
+When running, migrations are checked and executed before running the wsgi server.
 
 The `.env` file should be the main  configuration file for all the services.
 

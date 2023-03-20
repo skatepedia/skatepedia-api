@@ -32,8 +32,8 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_spectacular",
     "drf_spectacular_sidecar",
-    "skatepedia.db",
-    "skatepedia.api",
+    "skatepedia_db.db",
+    "skatepedia_api.api",
 ]
 
 MIDDLEWARE = [
@@ -46,7 +46,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "skatepedia.urls"
+ROOT_URLCONF = "skatepedia_api.urls"
 
 TEMPLATES = [
     {
@@ -64,7 +64,7 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = "skatepedia.wsgi.application"
+WSGI_APPLICATION = "skatepedia_api.wsgi.application"
 
 
 # Database
