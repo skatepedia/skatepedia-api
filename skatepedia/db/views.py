@@ -10,7 +10,8 @@ def home(request):
 
 
 def video_detail(request, slug):
-    if video := Video.objects.filter(slug=slug).first():
+    video = Video.objects.filter(slug=slug).first()
+    if video and video.archive_file:
         return HttpResponse(
             video.archive_file.read(),
             headers={
@@ -18,3 +19,7 @@ def video_detail(request, slug):
             },
         )
     return HttpResponseNotFound("Video not found")
+
+
+def get_videos():
+    return Video.objects.all().values_list("slug").iterator()

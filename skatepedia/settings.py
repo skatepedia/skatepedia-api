@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_spectacular",
     "drf_spectacular_sidecar",
+    "django_distill",
     "skatepedia.db",
     "skatepedia.api",
 ]
