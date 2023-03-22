@@ -147,5 +147,9 @@ except:
 
 IPFS_STORAGE_API_URL = env.str("IPFS_STORAGE_API_URL", f"/ip4/{IPFS_HOST}/tcp/5001")
 IPFS_STORAGE_GATEWAY_URL = env.str(
-    "IPFS_STORAGE_GATEWAY_URL", f"/ip4/{IPFS_HOST}/tcp/8008"
+    "IPFS_STORAGE_GATEWAY_URL", f"/ip4/{IPFS_HOST}/tcp/8080"
+)
+IPFS_STORAGE_GATEWAY_API_URL = env.str(
+    "IPFS_STORAGE_GATEWAY_API_URL",
+    f"http://localhost:8080",  # specified as localhost to access docker via your host machine using a Browser which supports IPFS response header x-ipfs-path
 )
