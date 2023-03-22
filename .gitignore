@@ -28,6 +28,6 @@ static
 
 skatepedia/db/migrations/
 scraper/exports
-
+*_data
 *.pgp
 *.zip

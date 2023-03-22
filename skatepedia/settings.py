@@ -1,5 +1,6 @@
 """Django settings for skatepedia project."""
 import os
+import socket
 from pathlib import Path
 
 import environ
@@ -136,3 +137,11 @@ SPECTACULAR_SETTINGS = {
     "SWAGGER_UI_DIST": "SIDECAR",  # shorthand to use the sidecar instead
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
 }
+
+IPFS_HOST = socket.gethostbyname(
+    "ipfs"
+)  # Resolve docker-compose service name to a valid IP
+IPFS_STORAGE_API_URL = env.str("IPFS_STORAGE_API_URL", f"/ip4/{IPFS_HOST}/tcp/5001")
+IPFS_STORAGE_GATEWAY_URL = env.str(
+    "IPFS_STORAGE_GATEWAY_URL", f"/ip4/{IPFS_HOST}/tcp/8008"
+)
