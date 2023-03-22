@@ -138,9 +138,12 @@ SPECTACULAR_SETTINGS = {
     "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
 }
 
-IPFS_HOST = socket.gethostbyname(
-    "ipfs"
-)  # Resolve docker-compose service name to a valid IP
+# Resolve docker-compose service name to a valid IP
+try:
+    IPFS_HOST = socket.gethostbyname("ipfs")
+except:
+    IPFS_HOST = "0.0.0.0"
+
 IPFS_STORAGE_API_URL = env.str("IPFS_STORAGE_API_URL", f"/ip4/{IPFS_HOST}/tcp/5001")
 IPFS_STORAGE_GATEWAY_URL = env.str(
     "IPFS_STORAGE_GATEWAY_URL", f"/ip4/{IPFS_HOST}/tcp/8008"
