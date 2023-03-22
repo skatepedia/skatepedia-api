@@ -1,0 +1,10 @@
+{% extends "db/base.html" %}
+{% load static %}
+
+{% block scripts %}
+    {{ block.super }}
+{% endblock %}
+
+{% block body %}
+<h2>{{ video.title }}</h2>
+{% endblock %}

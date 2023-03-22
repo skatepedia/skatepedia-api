@@ -1,6 +1,8 @@
 import uuid
 from datetime import datetime
 
+from ipfs_storage.storage import InterPlanetaryFileSystemStorage
+
 from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
@@ -77,24 +79,29 @@ class Video(BaseModel):
     slug = models.CharField(verbose_name=_("Slug"), max_length=128, unique=True)
     description = models.TextField(verbose_name=_("Description"), blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
-    image = models.URLField(verbose_name=_("Video Poster"), null=True)
+    image = models.URLField(verbose_name=_("Video Poster"), null=True, blank=True)
     runtime = models.PositiveSmallIntegerField(null=True)
     year = models.PositiveSmallIntegerField(null=True)
-    trailer = models.URLField(verbose_name=_("Trailer Link"), null=True)
-    videolink = models.URLField(verbose_name=_("Video Link"), null=True)
+    trailer = models.URLField(verbose_name=_("Trailer Link"), null=True, blank=True)
+    videolink = models.URLField(verbose_name=_("Video Link"), null=True, blank=True)
     external_url = models.CharField(verbose_name=_("external_url"), max_length=128)
     links = models.JSONField(blank=True, verbose_name=_("Video Links"), null=True)
     is_active = models.BooleanField(default=True)
 
     category = models.ForeignKey(VideoCategory, on_delete=models.PROTECT, null=True)
     company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True)
-    skaters = models.ManyToManyField(Skater)
+    skaters = models.ManyToManyField(Skater, blank=True)
     filmmakers = models.ManyToManyField(
-        Filmmaker,
-        verbose_name=_("Filmmakers"),
+        Filmmaker, verbose_name=_("Filmmakers"), blank=True
     )
     soundtracks = models.JSONField(blank=True, null=True)  # TODO:mgr move to Soundtrack
-    # cids = models.JSONField(verbose_name="List of IPFS CIDs", blank=True)
+    cids = models.JSONField(verbose_name="List of IPFS CIDs", blank=True, null=True)
+    archive_file = models.FileField(
+        storage=InterPlanetaryFileSystemStorage(), null=True, blank=True
+    )
+
+    def __str__(self):
+        return f"{self.title}"
 
     def save(self, *args, **kwargs):
         if not self.pk and not self.slug:

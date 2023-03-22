@@ -12,6 +12,8 @@ services:
     depends_on:
       database:
         condition: service_started
+      ipfs:
+        condition: service_started
 
   database:
     image: 'postgres:latest'
@@ -21,3 +23,14 @@ services:
       - .env
     volumes:
       - ./db_data/:/var/lib/postgresql/data/
+
+  ipfs:
+    image: ipfs/kubo:latest
+    ports:
+      - "5001:5001" # ipfs api - expose if needed/wanted
+      - "8080:8080" # ipfs gateway - expose if needed/wanted
+      # - "4001:4001" # ipfs swarm - expose if needed/wanted
+    env_file:
+      - .env
+    volumes:
+      - ./ipfs_data:/data/ipfs
