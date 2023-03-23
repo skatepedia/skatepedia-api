@@ -31,3 +31,6 @@ scraper/exports
 *_data
 *.pgp
 *.zip
+
+staticfiles
+distill
