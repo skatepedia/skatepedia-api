@@ -153,3 +153,13 @@ IPFS_STORAGE_GATEWAY_API_URL = env.str(
     "IPFS_STORAGE_GATEWAY_API_URL",
     f"http://localhost:8080",  # specified as localhost to access docker via your host machine using a Browser which supports IPFS response header x-ipfs-path
 )
+
+DISTILL_DIR = BASE_DIR / "staticsite"
+
+DISTILL_PUBLISH = {
+    "ipfs": {
+        "ENGINE": "django_distill.backends.ipfs",
+        "IPFS_API_URL": "http://localhost:5001",
+        "IPFS_GATEWAY_URL": "http://localhost:8080",
+    },
+}

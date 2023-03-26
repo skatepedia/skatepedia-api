@@ -1,0 +1,9 @@
+[submodule "django-distill-example"]
+	path = django-distill-example
+	url = git@github.com:skatepedia/django-distill-example.git
+[submodule "django-distill"]
+	path = django-distill
+	url = git@github.com:skatepedia/django-distill.git
+[submodule "django-ipfs-storage"]
+	path = django-ipfs-storage
+	url = git@github.com:skatepedia/django-ipfs-storage.git
