@@ -79,6 +79,8 @@ Then upload the whole staticsite folder to IPFS to have a decentralized static s
 
 `ipfs add -r  staticsite`
 
+Go to https://ipfs.io/ipfs/[staticsite_folder_cid]/videos/funhouse-3.html
+
 ## Resources
 
 ### Skate Data

@@ -5,13 +5,7 @@ from django.views.generic import TemplateView
 from django.contrib.sitemaps import GenericSitemap
 from django.contrib.sitemaps.views import sitemap
 
-from .views import (
-    get_videos,
-    video_list,
-    video_detail,
-    get_all_videos,
-    get_video_pages
-)
+from .views import VideoSitemap, video_list, video_detail, get_all_videos
 
 urlpatterns = [
     path(
@@ -21,25 +15,17 @@ urlpatterns = [
     path(
         "sitemap.xml",
         sitemap,
-        {
-            "sitemaps": {
-                "videos": GenericSitemap({"queryset": get_all_videos()}, priority=0.6)
-            }
-        },
+        {"sitemaps": {"videos": VideoSitemap}},
         name="django.contrib.sitemaps.views.sitemap",
     ),
-    distill_path(
-        "videos/pages/<int:page>.html",
+    path(
+        "videos",
         video_list,
         name="video-list",
-        distill_func=get_video_pages,
-        distill_status_codes=(200, 404),
     ),
-    distill_path(
-        "videos/<slug:slug>.html",
+    path(
+        "videos/<str:slug>",
         video_detail,
         name="video-detail",
-        distill_func=get_videos,
-        distill_status_codes=(200, 404),
     ),
 ]

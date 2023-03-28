@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django_distill",
     "skatepedia.db",
     "skatepedia.api",
+    "skatepedia.archive",
 ]
 
 MIDDLEWARE = [
