@@ -13,43 +13,43 @@ from skatepedia.db.models import (
 from skatepedia.api.serializers import *
 
 
-class SkaterViewSet(viewsets.ModelViewSet):
+class SkaterViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Skater.objects.all()
     serializer_class = SkaterSerializer
 
 
-class FilmmakerViewSet(viewsets.ModelViewSet):
+class FilmmakerViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Filmmaker.objects.all()
     serializer_class = FilmmakerSerializer
 
 
-class VideoViewSet(viewsets.ModelViewSet):
+class VideoViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     filterset_fields = ["year", "runtime", "company", "skaters", "filmmakers"]
 
 
-class VideoCategoryViewSet(viewsets.ModelViewSet):
+class VideoCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = VideoCategory.objects.all()
     serializer_class = VideoCategorySerializer
 
 
-class ClipViewSet(viewsets.ModelViewSet):
+class ClipViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Clip.objects.all()
     serializer_class = ClipSerializer
 
 
-class CompanyViewSet(viewsets.ModelViewSet):
+class CompanyViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
 
 
-class SoundtrackViewSet(viewsets.ModelViewSet):
+class SoundtrackViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Soundtrack.objects.all()
     serializer_class = SoundtrackSerializer
 
 
-class TrackViewSet(viewsets.ModelViewSet):
+class TrackViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Track.objects.all()
     serializer_class = TrackSerializer
