@@ -1,19 +1,72 @@
 {% extends "db/base.html" %}
-{% load static %}
 
 {% block title %}
 {{ block.super }} |  {{ video.title }}
 {% endblock %}
 
+{% block meta_title %} {{ video.title }}{% endblock %}
+{% block meta_description %} {{ video.description }}{% endblock %}
+
+{% block meta_extra %}
+<meta itemprop="name" content="{{ video.title }}">
+<meta itemprop="description" content="{{ video.description }}">
+<meta itemprop="image" content="{{ video.image }}">
+
+<meta property="og:url" content="">
+<meta property="og:title" content="{{ video.title }}">
+<meta property="og:image" content="{{ video.image }}">
+<meta property="og:description" content="{{ video.description }}">
+{% endblock %}
+
 {% block scripts %}
-    {{ block.super }}
+{{ block.super }}
 {% endblock %}
 
 {% block body %}
 <article>
+
   <header itemscope itemtype="http://schema.org/BlogPosting">
-    <a itemprop="url" itemprop="headline" href="{% url 'video-detail' slug=video.slug %}"><h3>{{ video.title|upper }}</h3></a>
+    <h1><a itemprop="url" itemprop="headline" href="{% url 'video-detail' slug=video.slug %}">{{ video.title|upper }}</a></h1>
     <link itemprop="url" href="{% url 'video-detail' slug=video.slug %}">
   </header>
-</article>
-{% endblock %}
+
+  <section>
+    <img src="{{ video.image }}"><br>
+    <p>{{ video.description|safe|default_if_none:"" }}</p>
+    <p>{{ video.date|default_if_none:"" }}</p>
+    <p>{{ video.runtime }} minutes</p>
+    <ul>
+      <li><a href="{{ video.trailer }}">Trailer</a></li>
+      <li><a href="{{ video.videolink }}">Watch Online</a></li>
+      <li><a href="{{ video.external_url }}">External Source</a></li>
+    </ul>
+  </section>
+
+  {% if video.skaters.count %}
+  <section>
+    <header><h2>Skaters</h2></header>
+    <p>
+      <ul>
+        {% for skater in video.skaters.all %}
+        <li>{{ skater.name }}</li>
+        {% endfor %}
+      </ul>
+    </p>
+  </section>
+  {% endif %}
+
+  {% if video.filmmakers.count %}
+  <section>
+    <header><h2>Filmmakers</h2></header>
+    <p>
+      <ul>
+        {% for skater in video.filmmakers.all %}
+        <li>{{ skater.name }}</li>
+        {% endfor %}
+      </ul>
+    </p>
+  </section>
+    {% endif %}
+</artcile>
+
+{% endblock body %}

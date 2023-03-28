@@ -2,21 +2,49 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>
-            {% block title %}
-                Skatepedia Archive
-            {% endblock %}
-        </title>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="language" content="en_us">
+    <meta name="author" content="Skatepedia">
+    <meta name="title" content="{% block meta_title %}{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{% endblock %}">
 
-        {% block styles %}
-        {% endblock %}
+    {# Bots #}
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
 
-        {% block scripts %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}
-        {% endblock %}
-    </body>
+    {# Facebook Meta OpenGraph #}
+    <meta property="fb:app_id" content="">
+    <meta property="og:site_name" content="Skatepedia">
+    <meta property="og:locale" content="en">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="">
+
+    {% block meta_extra %}{% endblock %}
+
+   <!--[if lt IE 9]>
+   <script src="{% static "js/html5shiv.js" %}"></script>
+   <script src="{% static "js/respond.min.js" %}"></script>
+   <![endif]-->
+    <title>
+      {% block title %}
+      Skatepedia Archive
+      {% endblock %}
+    </title>
+
+    {% block styles %}
+    {% endblock %}
+
+    {% block scripts %}
+    {% endblock %}
+  </head>
+
+  <body>
+    <main class="container">
+      {% block body %}
+      {% endblock %}
+    </main>
+    <footer>Made with love <3 with open source tools by the <a href="https://github.com/skatepedia/skatepedia-api">SKATEPEDIA</a> community</footer>
+  </body>
 </html>
