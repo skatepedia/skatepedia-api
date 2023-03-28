@@ -26,7 +26,7 @@
 <article class="container">
 
   <header itemscope itemtype="http://schema.org/BlogPosting">
-    <h1><a itemprop="url" itemprop="headline" href="{% url 'video-detail' slug=video.slug %}">{{ video.title|upper }}</a></h1>
+    <h1><a itemprop="url" itemprop="headline" href="{% url 'archive-video-detail' slug=video.slug %}">{{ video.title|upper }}</a></h1>
     <link itemprop="url" href="{% url 'video-detail' slug=video.slug %}">
   </header>
 

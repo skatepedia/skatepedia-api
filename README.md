@@ -1,6 +1,5 @@
 # Skatepedia
 
-
 > **Warning**
 >
 > **WORK in PROGRESS**
@@ -52,7 +51,7 @@ Open a Django shell or run any other django-admin commands.
 `docker-compose run service python manage.py shell`
 
 
-### Crawl data
+## Crawling data
 
 > **Warning**
 >
@@ -60,8 +59,29 @@ Open a Django shell or run any other django-admin commands.
 
 `docker-compose run service scrapy crawl <spider_name>`
 
+## API
 
-## Data Resources
+Open the openapi.yml specification
+
+## Interplanetary Skate Archive [TODO]
+
+> **Warning**
+>
+> **Process for publishing on IPFS is a work in progress**
+
+`docker-compose run service python manage.py distill-local staticsite`
+
+in the `staticsite` folder run:
+
+`npx all-relative`
+
+Then upload the whole staticsite folder to IPFS to have a decentralized static site.
+
+`ipfs add -r  staticsite`
+
+Go to https://ipfs.io/ipfs/[staticsite_folder_cid]/videos/funhouse-3.html
+
+## Resources
 
 ### Skate Data
 
@@ -72,6 +92,8 @@ Special thanks to
 - [The Board](https://theboardr.com/)
 
   http://skately.com (not working anymore)
+
+
 
 ## Tech Resources
 

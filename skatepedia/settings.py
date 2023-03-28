@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sitemaps",
     "rest_framework",
     "django_filters",
     "drf_spectacular",
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
     "django_distill",
     "skatepedia.db",
     "skatepedia.api",
+    "skatepedia.archive",
 ]
 
 MIDDLEWARE = [
@@ -110,7 +112,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = env.str("STATIC_URL", default="/static/")
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticsite/staticfiles")
 
 # API configuration
 REST_FRAMEWORK = {

@@ -1,0 +1,2 @@
+User-Agent: *
+Allow: /videos/pages/1

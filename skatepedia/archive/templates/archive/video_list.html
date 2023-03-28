@@ -9,8 +9,8 @@
 {% for video in page_obj %}
 <article>
   <header itemscope itemtype="http://schema.org/BlogPosting">
-    <a itemprop="url" itemprop="headline" href="{% url 'video-detail' slug=video.slug %}"><h3>{{ video.title|upper }}</h3></a>
-    <link itemprop="url" href="{% url 'video-detail' slug=video.slug %}">
+    <a itemprop="url" itemprop="headline" href="{% url 'archive-video-detail' slug=video.slug %}"><h3>{{ video.title|upper }}</h3></a>
+    <link itemprop="url" href="{% url 'archive-video-detail' slug=video.slug %}">
   </header>
 </article>
 {% endfor %}
@@ -19,8 +19,8 @@
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
-            <a href="{% url 'video-list' %}?page=1 }}">&laquo; first</a>
-            <a href="{% url 'video-list' %}?page={{ page_obj.previous_page_number }}">previous</a>
+            <a href="{% url 'archive-video-list' page=1 %}">&laquo; first</a>
+            <a href="{% url 'archive-video-list' page=page_obj.previous_page_number %}">previous</a>
         {% endif %}
 
         <span class="current">
@@ -28,8 +28,8 @@
         </span>
 
         {% if page_obj.has_next %}
-            <a href="{% url 'video-list' %}?page={{ page_obj.next_page_number }}">next</a>
-            <a href="{% url 'video-list' %}?page={{ page_obj.paginator.num_pages }}">last</a>
+            <a href="{% url 'archive-video-list' page=page_obj.next_page_number %}">next</a>
+            <a href="{% url 'archive-video-list' page=page_obj.paginator.num_pages %}">last</a>
         {% endif %}
     </span>
 </div>

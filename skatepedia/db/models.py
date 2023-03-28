@@ -4,6 +4,7 @@ from datetime import datetime
 from ipfs_storage.storage import InterPlanetaryFileSystemStorage
 
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
@@ -107,6 +108,9 @@ class Video(BaseModel):
         if not self.pk and not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("video-detail", kwargs=dict(slug=self.slug))
 
 
 class Track(BaseModel):

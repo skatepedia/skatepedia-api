@@ -11,8 +11,8 @@
     <meta name="description" content="{% block meta_description %}{% endblock %}">
 
     {# Bots #}
-    <meta name="robots" content="index,follow">
-    <meta name="googlebot" content="index,follow">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
 
     {# Facebook Meta OpenGraph #}
     <meta property="fb:app_id" content="">
@@ -27,6 +27,16 @@
    <script src="{% static "js/html5shiv.js" %}"></script>
    <script src="{% static "js/respond.min.js" %}"></script>
    <![endif]-->
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+
+    <!-- CSS Reset -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+
+    <!-- Milligram CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+
     <title>
       {% block title %}
       Skatepedia Archive
@@ -41,10 +51,11 @@
   </head>
 
   <body>
+    <nav class="navigation"><a href="{% url 'video-list' %}">Skatepedia</a></nav>
     <main class="container">
       {% block body %}
       {% endblock %}
     </main>
-    <footer>Made with love <3 with open source tools by the <a href="https://github.com/skatepedia/skatepedia-api">SKATEPEDIA</a> community</footer>
+    <footer>Made with love <3 by the <a href="https://github.com/skatepedia/skatepedia-api">SKATEPEDIA</a> community</footer>
   </body>
 </html>

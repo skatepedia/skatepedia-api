@@ -3,7 +3,6 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.sitemaps import Sitemap
 from django.template.response import TemplateResponse
 
 from skatepedia.db.models import Video
@@ -11,23 +10,11 @@ from skatepedia.db.models import Video
 DEFAULT_PAGE_SIZE = 25
 
 
-class VideoSitemap(Sitemap):
-    changefreq = "monthly"
-    priority = 0.5
-
-    def items(self):
-        return Video.objects.filter(is_active=True)
-
-    def lastmod(self, obj):
-        return obj.updated_at
-
-
-def video_list(request):
-    page = request.GET.get("page", 1)
+def video_list(request, page):
     videos = Video.objects.all().values_list("slug", "title", named=True)
     paginator = Paginator(videos, DEFAULT_PAGE_SIZE)
     page_obj = paginator.get_page(page)
-    return TemplateResponse(request, "db/video_list.html", {"page_obj": page_obj})
+    return TemplateResponse(request, "archive/video_list.html", {"page_obj": page_obj})
 
 
 def video_detail(request, slug):
@@ -40,11 +27,23 @@ def video_detail(request, slug):
         )
 
     return (
-        TemplateResponse(request, "db/video_detail.html", {"video": video})
+        TemplateResponse(request, "archive/video_detail.html", {"video": video})
         if video
         else HttpResponseNotFound("Video not found")
     )
 
 
-def get_all_videos():
+def get_all_videos_qs():
     return Video.objects.all()
+
+
+def get_all_video_slugs():
+    for video in Video.objects.all().values_list("slug")[:5]:
+        yield video
+
+
+def get_all_videos_paged():
+    videos_qs = Video.objects.all().values_list("pk", flat=True).order_by("created_at")
+    paged = Paginator(videos_qs, DEFAULT_PAGE_SIZE)
+    for page in paged.page_range[:1]:
+        yield [page]
