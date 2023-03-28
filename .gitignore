@@ -32,5 +32,6 @@ scraper/exports
 *.pgp
 *.zip
 
-staticfiles
-staticsite
+staticsite/staticfiles/*
+staticsite/videos/*
+!staticsite/staticfiles/db/

@@ -29,13 +29,7 @@
    <![endif]-->
 
     <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-
-    <!-- CSS Reset -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
-
-    <!-- Milligram CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+    <link rel="stylesheet" href="{% static 'db/css/mini.min.css' %}">
 
     <title>
       {% block title %}
@@ -56,6 +50,8 @@
       {% block body %}
       {% endblock %}
     </main>
-    <footer>Made with love <3 by the <a href="https://github.com/skatepedia/skatepedia-api">SKATEPEDIA</a> community</footer>
+    <footer>
+      <p>Made with love <3 by the <a href="https://github.com/skatepedia/skatepedia-api">SKATEPEDIA</a> community</p>
+</footer>
   </body>
 </html>
