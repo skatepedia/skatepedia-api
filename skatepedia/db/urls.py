@@ -2,10 +2,9 @@ from django_distill import distill_path
 
 from django.urls import path
 
-from .views import home, get_videos, video_list, video_detail, get_video_pages
+from .views import get_videos, video_list, video_detail, get_video_pages
 
 urlpatterns = [
-    path("", home, name="home"),
     distill_path(
         "videos/pages/<int:page>/",
         video_list,

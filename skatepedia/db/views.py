@@ -11,10 +11,6 @@ DEFAULT_PAGE_SIZE = 25
 VIDEO_PAGE_SIZE = DEFAULT_PAGE_SIZE
 
 
-def home(request):
-    return TemplateResponse(request, "db/index.html")
-
-
 def video_list(request, page):
     videos = Video.objects.all().values_list("slug", "title", named=True)
     paginator = Paginator(videos, VIDEO_PAGE_SIZE)
