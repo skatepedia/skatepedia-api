@@ -34,6 +34,10 @@ def video_detail(request, slug):
     )
 
 
+def get_all_videos():
+    return Video.objects.all()
+
+
 def get_videos():
     for video in Video.objects.all().values_list("slug")[:5]:
         yield video

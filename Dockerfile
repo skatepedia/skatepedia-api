@@ -11,6 +11,7 @@ COPY requirements-dev.txt requirements-dev.txt
 COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements-dev.txt
 
+RUN mkdir /app/staticsite
 COPY scraper /app/scraper
 COPY skatepedia /app/skatepedia
 

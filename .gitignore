@@ -33,4 +33,4 @@ scraper/exports
 *.zip
 
 staticfiles
-distill
+staticsite

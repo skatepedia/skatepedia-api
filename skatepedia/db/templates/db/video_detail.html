@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block body %}
-<article>
+<article class="container">
 
   <header itemscope itemtype="http://schema.org/BlogPosting">
     <h1><a itemprop="url" itemprop="headline" href="{% url 'video-detail' slug=video.slug %}">{{ video.title|upper }}</a></h1>
