@@ -6,7 +6,9 @@ djangorestframework==3.14.0
 drf-spectacular[sidecar]
 Scrapy==2.8.0
 scrapy-djangoitem==1.1.1
-python-slugify
 psycopg2-binary==2.9.5
 git+https://github.com/skatepedia/django-ipfs-storage@master
 django-distill
+celery[redis]
+django-celery-results
+django-celery-beat

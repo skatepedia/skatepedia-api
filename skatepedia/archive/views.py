@@ -45,5 +45,5 @@ def get_all_video_slugs():
 def get_all_videos_paged():
     videos_qs = Video.objects.all().values_list("pk", flat=True).order_by("created_at")
     paged = Paginator(videos_qs, DEFAULT_PAGE_SIZE)
-    for page in paged.page_range[:1]:
+    for page in paged.page_range:
         yield [page]

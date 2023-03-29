@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "drf_spectacular_sidecar",
     "django_distill",
+    "django_celery_results",
+    "django_celery_beat",
     "skatepedia.db",
     "skatepedia.api",
     "skatepedia.archive",
@@ -82,6 +84,12 @@ DATABASES = {
 if database_url := env.db():
     DATABASES = {"default": database_url}
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": env.str("CACHE_URL", default="redis://localhost:6379"),
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -155,3 +163,7 @@ IPFS_STORAGE_GATEWAY_API_URL = env.str(
     "IPFS_STORAGE_GATEWAY_API_URL",
     f"http://localhost:8080",  # specified as localhost to access docker via your host machine using a Browser which supports IPFS response header x-ipfs-path
 )
+
+CELERY_BROKER_URL = CACHES["default"]["LOCATION"]
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = "django-cache"
