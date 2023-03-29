@@ -42,8 +42,6 @@ services:
       # - "4001:4001" # ipfs swarm - expose if needed/wanted
     env_file:
       - .env
-    volumes:
-      - ./ipfs_data:/data/ipfs
     healthcheck:
       test: ipfs dag stat /ipfs/QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn || exit 1
       interval: 5s

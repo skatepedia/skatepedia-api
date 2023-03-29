@@ -1,3 +1,5 @@
+import json
+
 import scrapy
 
 from scraper.items import CompanyItem
@@ -6,13 +8,15 @@ from scraper.items import CompanyItem
 class CompanySpider(scrapy.Spider):
     """Parse Skately brand library."""
 
+    base_url = "https://web.archive.org/web/20191003042112/"  # use web archive since page is down
     name = "companies"
     pages = range(2, 9)
-    LIMIT = 1
+    LIMIT = 10000  # Limit for debugging purposes
 
     def start_requests(self):
-        urls = ["http://skately.com/library/brands"] + [
-            f"http://skately.com/library/brands/page-{x}" for x in self.pages
+        urls = [f"{self.base_url}http://skately.com/library/brands"] + [
+            f"{self.base_url}http://skately.com/library/brands/page-{x}"
+            for x in self.pages
         ]
         self.logger.info(f"Scarping following {urls}")
 
@@ -41,9 +45,8 @@ class CompanySpider(scrapy.Spider):
         :return: CompanyItem
         """
         response.selector.remove_namespaces()
-        brand_rel = self.parse_brand_links(response)
-        brand_data = {
-            "external_uuid": response.url,
+        rels = self.parse_brand_links(response)
+        data = {
             "name": response.css("#lib-page-bio > h1::text").extract_first(),
             "description": response.css("#lib-page-bio > p::text").extract_first(),
             "logo": response.css(
@@ -53,12 +56,14 @@ class CompanySpider(scrapy.Spider):
                 "#lib-page-bio > ul > li:nth-child(1) > a::attr(href)"
             ).extract_first(),
             "links": response.css("#lib-page-bio > ul > li > a::attr(href)").extract(),
-            "videos": brand_rel["videos"],
-            "skaters": brand_rel["people"],
-            "similar_companies": brand_rel["brands"],
-            "ads": brand_rel["ads"],
+            "raw_data": rels,
+            "videos": rels["videos"],
+            "skaters": rels["people"],
+            "similar_companies": rels["brands"],
+            "ads": rels["ads"],
+            "source_url": response.url,
         }
-        yield CompanyItem(**brand_data)
+        yield CompanyItem(**data)
 
     def parse(self, response):
         brands = set(
