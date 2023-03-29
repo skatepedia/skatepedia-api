@@ -15,7 +15,7 @@ services:
       cache:
         condition: service_started
       ipfs:
-        condition: service_started
+        condition: service_healthy
 
   database:
     image: 'postgres:latest'
@@ -44,3 +44,8 @@ services:
       - .env
     volumes:
       - ./ipfs_data:/data/ipfs
+    healthcheck:
+      test: ipfs dag stat /ipfs/QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn || exit 1
+      interval: 5s
+      retries: 5
+      start_period: 10s

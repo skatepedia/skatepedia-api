@@ -51,17 +51,20 @@ Open a Django shell or run any other django-admin commands.
 `docker-compose run service python manage.py shell`
 
 
+
 ## Crawling data
 
 > **Warning**
 >
-> **NEEDS REVIEW: many sites have changed or went offline**
+> **Spiders may become outdated, as scraped websites may change or go offline**
 
 `docker-compose run service scrapy crawl <spider_name>`
 
 ## API
 
-Open the openapi.yml specification
+[Open the openapi.yml](http://localhost:9000/api/v1/schema) specification.
+
+or the [Swagger UI](http://localhost:9000/api/v1/schema/swagger-ui).
 
 ## Interplanetary Skate Archive [TODO]
 
@@ -100,3 +103,16 @@ Special thanks to
 - [Django](https://docs.djangoproject.com/)
 - [Scrapy](https://doc.scrapy.org/)
 - [Xpath](https://devhints.io/xpath)
+
+
+## Development
+
+### Troubleshooting
+
+- `ipfs`
+
+```
+skatepedia-api-ipfs-1      | Error: serveHTTPGateway: manet.Listen(/ip4/172.19.0.3/tcp/8080) failed: listen tcp4 172.19.0.3:8080: bind: cannot assign requested address
+```
+
+The `docker-compose.yml` ipfs service overrides the default healthcheck. If the service can't bind an address:port there might be an error in the ipfs config, try deleting the `ipfs_data` folder.
