@@ -18,7 +18,7 @@ class BaseModel(models.Model):
         get_user_model(), on_delete=models.PROTECT, null=True, blank=True
     )
     skatevideosite_id = models.PositiveIntegerField(
-        verbose_name=_("external_id"), unique=True, null=True, blank=True
+        verbose_name=_("skatevideosite_id"), unique=True, null=True, blank=True
     )
     source_url = models.URLField(null=True, blank=True)
 

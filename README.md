@@ -4,11 +4,9 @@
 >
 > **WORK in PROGRESS**
 
-This project runs an skateboarding REST API.
-Uses: Django + DRF + Postgresql and Scrapy
+Uses: Django + DRF + Postgresql + Celery + IPFS + Scrapy
 
-## Quickstart.
-
+## Quickstart
 ### Installation
 
 Requires [Docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/)
@@ -51,12 +49,12 @@ Open a Django shell or run any other django-admin commands.
 `docker-compose run service python manage.py shell`
 
 
-
 ## Crawling data
 
 > **Warning**
 >
 > **Spiders may become outdated, as scraped websites may change or go offline**
+
 
 `docker-compose run service scrapy crawl <spider_name>`
 
@@ -93,24 +91,22 @@ Special thanks to
 
 - [SkateVideoSite](http://www.skatevideosite.com)
 - [The Board](https://theboardr.com/)
-
-  http://skately.com (not working anymore)
-
-
+-  [http://skately.com](https://web.archive.org/web/20191003042112/) Using Web Archive since original site is down.
 
 ## Tech Resources
 
 - [Django](https://docs.djangoproject.com/)
+- [IPFS - InerplanetaryFileSystem](https://ipfs.tech/)
+- [Celery - Distributed Task Queue](https://docs.celeryq.dev/en/stable/)
+- [DRF - REST Framework](https://www.django-rest-framework.org/)
+- [django-filters](https://django-filter.readthedocs.io/en/stable/index.html)
+- [DRF nested routes](https://github.com/alanjds/drf-nested-routers)
 - [Scrapy](https://doc.scrapy.org/)
-- [Xpath](https://devhints.io/xpath)
-
 
 ## Development
-
 ### Troubleshooting
 
 - `ipfs`
-
 ```
 skatepedia-api-ipfs-1      | Error: serveHTTPGateway: manet.Listen(/ip4/172.19.0.3/tcp/8080) failed: listen tcp4 172.19.0.3:8080: bind: cannot assign requested address
 ```
