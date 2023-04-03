@@ -36,9 +36,15 @@
     <p>{{ video.date|default_if_none:"" }}</p>
     <p>{{ video.runtime }} minutes</p>
     <ul>
-      <li><a href="{{ video.trailer }}">Trailer</a></li>
-      <li><a href="{{ video.videolink }}">Watch Online</a></li>
-      <li><a href="{{ video.external_url }}">External Source</a></li>
+        {% if video.trailer %}
+        <li><a href="{{ video.trailer }}">Trailer</a></li>
+        {% endif %}
+        {% if video.videolink %}
+        <li><a href="{{ video.videolink }}">Watch Online</a></li>
+        {% endif %}
+        {% if video.external_url %}
+        <li><a href="{{ video.external_url }}">External Source</a></li>
+        {% endif %}
     </ul>
   </section>
 
@@ -61,7 +67,7 @@
     <p>
       <ul>
         {% for skater in video.filmmakers.all %}
-        <li>{{ skater.name }}</li>
+        <li>{{ skater.pk }} - {{ skater.slug }}</li>
         {% endfor %}
       </ul>
     </p>

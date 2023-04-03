@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class BaseModel(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(blank=True, auto_now=True)
     updated_by = models.ForeignKey(
@@ -20,17 +20,27 @@ class BaseModel(models.Model):
     skatevideosite_id = models.PositiveIntegerField(
         verbose_name=_("skatevideosite_id"), unique=True, null=True, blank=True
     )
-    source_url = models.URLField(null=True, blank=True)
+
+    # RAW Scraped data and source
+    raw_data = models.JSONField(null=True, blank=True)
+    source_url = models.URLField(unique=True, null=True, blank=True)
 
     class Meta:
         abstract = True
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.name}" if self.name else self.source_url or str(self.id)
+
+    def save(self, *args, **kwargs):
+        if self.source_url and self.__dict__.get("slug"):
+            self.slug = slugify(self.source_url.split("/")[-1])
+        super().save(*args, **kwargs)
 
 
 class Person(BaseModel):
-    name = models.CharField(verbose_name=_("Name"), max_length=128, unique=True)
+    name = models.CharField(
+        verbose_name=_("Name"), max_length=128, null=True, blank=True
+    )
     image = models.CharField(
         verbose_name=_("Profile picture"), max_length=128, null=True, blank=True
     )
@@ -47,7 +57,6 @@ class Person(BaseModel):
     country = models.CharField(
         verbose_name=_("Country"), max_length=128, null=True, blank=True
     )
-    raw_data = models.JSONField(null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -76,11 +85,6 @@ class Company(BaseModel):
     logo = models.URLField(verbose_name=_("Logo"), null=True, blank=True)
     website = models.URLField(verbose_name=_("Website"), null=True, blank=True)
     links = models.TextField(verbose_name=_("Hyperlinks"), max_length=2000, blank=True)
-    external_uuid = models.CharField(
-        verbose_name=_("External_url"), max_length=128, blank=True
-    )
-
-    raw_data = models.JSONField(null=True, blank=True)
     skaters = models.ManyToManyField(Skater)
     similar_companies = models.ManyToManyField("self")
 
@@ -96,37 +100,59 @@ class VideoCategory(BaseModel):
 
 
 class Video(BaseModel):
-    title = models.CharField(verbose_name=_("Title"), max_length=128)
-    slug = models.CharField(verbose_name=_("Slug"), max_length=128, unique=True)
+    title = models.CharField(verbose_name=_("Title"), max_length=128, blank=True)
+    slug = models.CharField(
+        verbose_name=_("Slug"), max_length=128, unique=True, blank=True
+    )
     description = models.TextField(verbose_name=_("Description"), blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
     image = models.URLField(verbose_name=_("Video Poster"), null=True, blank=True)
-    runtime = models.PositiveSmallIntegerField(null=True)
-    year = models.PositiveSmallIntegerField(null=True)
+    runtime = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+    )
+    year = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+    )
     trailer = models.URLField(verbose_name=_("Trailer Link"), null=True, blank=True)
     videolink = models.URLField(verbose_name=_("Video Link"), null=True, blank=True)
-    external_url = models.CharField(verbose_name=_("external_url"), max_length=128)
-    links = models.JSONField(blank=True, verbose_name=_("Video Links"), null=True)
+    links = models.JSONField(
+        blank=True,
+        verbose_name=_("Video Links"),
+        null=True,
+    )
     is_active = models.BooleanField(default=True)
 
-    category = models.ForeignKey(VideoCategory, on_delete=models.PROTECT, null=True)
-    company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True)
+    category = models.ForeignKey(
+        VideoCategory,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+    )
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+    )
     skaters = models.ManyToManyField(Skater, blank=True)
     filmmakers = models.ManyToManyField(
         Filmmaker, verbose_name=_("Filmmakers"), blank=True
     )
-    soundtracks = models.JSONField(blank=True, null=True)  # TODO:mgr move to Soundtrack
     cids = models.JSONField(verbose_name="List of IPFS CIDs", blank=True, null=True)
     archive_file = models.FileField(
         storage=InterPlanetaryFileSystemStorage(), null=True, blank=True
     )
 
     def __str__(self):
-        return f"{self.title}"
+        return f"{self.title}" if self.title else self.source_url
 
     def save(self, *args, **kwargs):
-        if not self.pk and not self.slug:
+        if self.title and not self.slug:
             self.slug = slugify(self.title)
+        if self.source_url and not self.slug:
+            self.slug = slugify(self.source_url.split("/")[-1])
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -134,7 +160,9 @@ class Video(BaseModel):
 
 
 class Track(BaseModel):
-    name = models.CharField(verbose_name=_("Name"), max_length=128)
+    name = models.CharField(
+        verbose_name=_("Name"), max_length=128, unique=True, null=True, blank=True
+    )
     artist = models.CharField(verbose_name=_("Artist"), max_length=128)
     links = models.JSONField(verbose_name=_("URLs"), max_length=128)
 
@@ -145,17 +173,26 @@ class Soundtrack(BaseModel):
     video = models.OneToOneField(Video, on_delete=models.PROTECT)
 
 
+class Spot(BaseModel):
+    name = models.CharField(
+        verbose_name=_("Name"), max_length=128, blank=True, null=True
+    )
+    location = models.URLField(
+        verbose_name=_("Name"), max_length=128, blank=True, null=True
+    )
+
+
 class Clip(BaseModel):
     """Skater video part or any specific video clip"""
 
+    name = models.CharField(
+        verbose_name=_("Name"), max_length=128, blank=True, null=True
+    )
     thumbnail = models.URLField(
         verbose_name=_("Clip Thumbnail"), max_length=128, blank=True
     )
-    url = models.URLField(
-        verbose_name=_("Clip URL from the main video"), max_length=128
-    )
-    skater = models.ForeignKey(Skater, on_delete=models.PROTECT, null=True)
-    track = models.ForeignKey(Track, on_delete=models.PROTECT, null=True)
+    skaters = models.ManyToManyField(Skater)
+    tracks = models.ManyToManyField(Track)
     video = models.ForeignKey(Video, on_delete=models.PROTECT, null=True)
     sort = models.PositiveSmallIntegerField(
         _("Order of the clip in the video"), default=1

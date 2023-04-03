@@ -20,6 +20,11 @@ class VideoCategoryAdmin(admin.ModelAdmin):
     list_display = ("name", "website")
 
 
+class TrackAdmin(admin.ModelAdmin):
+    list_display = ("name", "artist")
+    search_fields = ("artist",)
+
+
 admin.site.register(models.Company, CompanyAdmin)
 admin.site.register(models.VideoCategory)
 admin.site.register(models.Video, VideoAdmin)
@@ -27,4 +32,4 @@ admin.site.register(models.Clip)
 admin.site.register(models.Skater, SkaterAdmin)
 admin.site.register(models.Soundtrack)
 admin.site.register(models.Filmmaker)
-admin.site.register(models.Track)
+admin.site.register(models.Track, TrackAdmin)
