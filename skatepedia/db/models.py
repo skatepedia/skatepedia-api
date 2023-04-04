@@ -41,11 +41,11 @@ class Person(BaseModel):
     name = models.CharField(
         verbose_name=_("Name"), max_length=128, null=True, blank=True
     )
-    image = models.CharField(
+    image = models.URLField(
         verbose_name=_("Profile picture"), max_length=128, null=True, blank=True
     )
     gender = models.CharField(
-        verbose_name=_("Gender"), max_length=1, null=True, blank=True
+        verbose_name=_("Gender"), max_length=1, null=True, blank=True, default='M'
     )
     bio = models.CharField(verbose_name=_("Bio"), max_length=128, null=True, blank=True)
     year_of_birth = models.PositiveSmallIntegerField(
@@ -85,6 +85,7 @@ class Company(BaseModel):
     logo = models.URLField(verbose_name=_("Logo"), null=True, blank=True)
     website = models.URLField(verbose_name=_("Website"), null=True, blank=True)
     links = models.TextField(verbose_name=_("Hyperlinks"), max_length=2000, blank=True)
+
     skaters = models.ManyToManyField(Skater)
     similar_companies = models.ManyToManyField("self")
 
@@ -173,27 +174,24 @@ class Soundtrack(BaseModel):
     video = models.OneToOneField(Video, on_delete=models.PROTECT)
 
 
-class Spot(BaseModel):
-    name = models.CharField(
-        verbose_name=_("Name"), max_length=128, blank=True, null=True
-    )
-    location = models.URLField(
-        verbose_name=_("Name"), max_length=128, blank=True, null=True
-    )
-
-
 class Clip(BaseModel):
     """Skater video part or any specific video clip"""
-
     name = models.CharField(
         verbose_name=_("Name"), max_length=128, blank=True, null=True
-    )
-    thumbnail = models.URLField(
-        verbose_name=_("Clip Thumbnail"), max_length=128, blank=True
     )
     skaters = models.ManyToManyField(Skater)
     tracks = models.ManyToManyField(Track)
     video = models.ForeignKey(Video, on_delete=models.PROTECT, null=True)
     sort = models.PositiveSmallIntegerField(
         _("Order of the clip in the video"), default=1
+    )
+
+
+class Spot(BaseModel):
+    name = models.CharField(
+        verbose_name=_("Name"), max_length=128, blank=True, null=True
+    )
+    description = models.TextField(verbose_name=_("Description"), blank=True, null=True)
+    map_location = models.URLField(
+        verbose_name=_("Name"), max_length=128, blank=True, null=True
     )

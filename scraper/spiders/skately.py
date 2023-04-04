@@ -14,6 +14,7 @@ Clip
 import re
 import json
 from abc import ABC, abstractmethod
+from contextlib import suppress
 
 import scrapy
 
@@ -81,8 +82,9 @@ def parse_brand_page(response):
     """
     response.selector.remove_namespaces()
     rel_links = response.css("#col-left > ul > li > div > a::attr(href)")
-    rels = parse_relations(rel_links)
+    rels = parse_relations(rel_links, resources=['people', 'videos', 'brands'])
     data = {
+        "source_url": response.url,
         "name": response.css("#lib-page-bio > h1::text").extract_first(),
         "description": response.css("#lib-page-bio > p::text").extract_first(),
         "logo": response.css(
@@ -95,19 +97,16 @@ def parse_brand_page(response):
     }
     data.update(
         {
-            "raw_data": {**data, **rels},
-            "source_url": response.url,
-            "videos": rels["videos"],
-            "skaters": rels.get("people", []),
-            "similar_companies": rels.get("brands", []),
-            "ads": rels["ads"],
+            "skaters_urls": rels.get("people", []),
+            "videos_urls": rels.get("videos", []),
+            "similar_companies_urls": rels.get("brands", []),
         }
     )
     yield CompanyItem(**data)
 
 
 def parse_people_page(response):
-    """Parse a library brand page.
+    """Parse a library people page.
 
     http://skately.com/library/people/mark-gonzales
 
@@ -117,8 +116,23 @@ def parse_people_page(response):
     response.selector.remove_namespaces()
     data = {
         "name": response.css("#lib-page-bio > h1::text").extract_first(),
-        "bio": response.css("#lib-page-bio > p::text").extract_first(),
+        "image": response.css("meta[property='og:image']::attr(content)").extract_first(),
+        "bio": response.css("meta[name='description']::attr(content)").extract_first(),
+        "source_url": response.url,
     }
+    labels = response.css("#lib-page-bio > ul > li > strong::text").extract()
+    values = response.css("#lib-page-bio > ul > li::text").extract()
+
+
+    for label, value in zip(labels, values):
+        with suppress(AttributeError):
+            if label == "Born:":
+                data['year_of_birth'] = re.search('\d{4}', value).group(0)
+            elif label == "Stance:":
+                data['stance'] = value.strip()
+            elif label == "Hometown:":
+                data['city'] = value.strip()
+
     yield SkaterItem(**data)
 
 
@@ -127,7 +141,7 @@ def parse_relations(links, resources=None):
     match_url = r"[\w\d:#@%/;$()~_?\+-=\\\.&]"
     resources = resources or LIBRARY_RESOURCE_TYPES
     return {
-        rel_type: links.re(f"{match_url}+{rel_type}+{match_url}*")
+        rel_type: set(links.re(f"{match_url}+{rel_type}+{match_url}*"))
         for rel_type in resources
     }
 
@@ -255,9 +269,34 @@ def parse_soundtrack_page(response):
     yield SoundtrackItem(name=name, video=video_link, tracks=tracks)
 
 
-class BrandSpider(SkatelySpider):
-    """Parse archived Skately brand library."""
+class PeopleSpider(SkatelySpider):
+    """Parse Skately people library."""
+    name = "skately-people"
+    resource = "people"
+    pages = range(2, 54)
 
+    def parse_page(self, response):
+        return parse_people_page(response)
+
+
+class SpotSpider(SkatelySpider):
+    """Parse Skately spot library.
+
+    https://web.archive.org/web/20170619231904/http://skately.com/library/spots/7th-street-elementary-school
+    """
+    name = "skately-spots"
+    resource = "spots"
+    pages = range(2, 5)
+
+    def parse_page(self, response):
+        return parse_spot_page(response)
+
+
+class BrandSpider(SkatelySpider):
+    """Parse archived Skately brand library.
+
+    https://web.archive.org/web/20190715034702/http://skately.com/library/brands/blind-skateboards
+    """
     name = "skately-brands"
     resource = "brands"
 
@@ -270,7 +309,7 @@ class VideoSpider(SkatelySpider):
 
     name = "skately-videos"
     resource = "videos"
-    LIMIT = 5
+    LIMIT = 1
 
     def parse_page(self, response):
         return parse_video_page(response)

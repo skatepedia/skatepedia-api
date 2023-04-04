@@ -30,7 +30,6 @@ def get_or_create(model, unique_value, unique_field="source_url", data=None):
         return obj
     if data is None:
         data = query
-
     return model.objects.create(**data)
 
 
@@ -45,17 +44,17 @@ class FilmmakerItem(DjangoItem):
 class CompanyItem(DjangoItem):
     django_model = Company
 
-    skaters = scrapy.Field()
-    similar_companies = scrapy.Field()
-    videos = scrapy.Field()
-    ads = scrapy.Field()
+    # m2m fields
+    videos_urls = scrapy.Field()
+    skaters_urls = scrapy.Field()
+    similar_companies_urls = scrapy.Field()
 
     def save(self, *args, **kwargs):
-        skaters = [Skater(source_url=skater_url) for skater_url in self["skaters"]]
+        skaters = [Skater(source_url=url) for url in self["skaters_urls"]]
         Skater.objects.bulk_create(skaters, ignore_conflicts=True)
 
         companies = [
-            Company(source_url=company_url) for company_url in self["similar_companies"]
+            Company(source_url=url) for url in self["similar_companies_urls"]
         ]
         Company.objects.bulk_create(companies, ignore_conflicts=True)
 
@@ -66,20 +65,13 @@ class CompanyItem(DjangoItem):
         return self.instance.save()
 
 
-def get_url_slug(url):
-    if url is None:
-        return
-    try:
-        return url.split("/")[-1]
-    except IndexError:
-        return
-
-
 class VideoItem(DjangoItem):
     django_model = Video
-    # relational fields
+
+    # FK  fields
     category_url = scrapy.Field()
     company_url = scrapy.Field()
+    # M2M fields
     skaters_urls = scrapy.Field()
     filmmakers_urls = scrapy.Field()
 
@@ -111,8 +103,7 @@ class VideoItem(DjangoItem):
 
 
 class ClipItem(DjangoItem):
-    """Depends on video"""
-
+    """Depends on Video"""
     django_model = Clip
     tracks = scrapy.Field()
     skaters = scrapy.Field()
@@ -161,15 +152,3 @@ class RankItem(scrapy.Item):
     position = scrapy.Field()
     points = scrapy.Field()
     skater = scrapy.Field()
-
-
-class SkaterItemLoader(ItemLoader):
-    bio_in = MapCompose(strip_html5_whitespace, replace_escape_chars)
-    country_in = MapCompose(strip_html5_whitespace, replace_escape_chars)
-    age_in = MapCompose(int)
-
-
-class VideoItemLoader(ItemLoader):
-    default_input_processor = MapCompose(str.strip)
-    default_output_processor = TakeFirst()
-    year_in = MapCompose(int)

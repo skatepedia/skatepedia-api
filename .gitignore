@@ -15,6 +15,7 @@ __pycache__
 
 # Scrapy
 *.json
+!scripts/*\/*.json
 .scrapy
 
 # Local development
