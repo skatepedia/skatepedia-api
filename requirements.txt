@@ -1,4 +1,4 @@
-Django==4.1.7
+Django==4.1.10
 django-filter
 drf-nested-routers
 django-environ==0.10.0
