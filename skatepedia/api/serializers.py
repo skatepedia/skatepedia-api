@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework_json_api import serializers
 
 from skatepedia.db.models import (
     Clip,
@@ -6,55 +6,71 @@ from skatepedia.db.models import (
     Video,
     Skater,
     Company,
+    BaseModel,
     Filmmaker,
     Soundtrack,
     VideoCategory
 )
 
 
-class SkaterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Skater
-        fields = "__all__"
+def nested_resource(_model, _fields="__all__", _exclude=None, _depth=0):
+    class NestedSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = _model
+            depth = _depth
+            fields = _fields
+            exclude = _exclude
 
-
-class FilmmakerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Filmmaker
-        fields = "__all__"
-
-
-class VideoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Video
-        fields = "__all__"
-
-
-class VideoCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = VideoCategory
-        fields = "__all__"
-
-
-class ClipSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Clip
-        fields = "__all__"
-
-
-class CompanySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Company
-        fields = "__all__"
+    return NestedSerializer
 
 
 class SoundtrackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Soundtrack
-        fields = "__all__"
+        exclude = ("skatevideosite_id", "raw_data", "updated_by")
 
 
 class TrackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Track
-        fields = "__all__"
+        fields = ("name", "artist", "links")
+
+
+class SkaterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skater
+        exclude = ("skatevideosite_id", "raw_data", "updated_by")
+
+
+class FilmmakerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Filmmaker
+        exclude = ("skatevideosite_id", "raw_data", "updated_by")
+
+
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        exclude = ("skatevideosite_id", "raw_data", "updated_by")
+        model = Video
+
+
+class VideoCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoCategory
+        exclude = ("skatevideosite_id", "raw_data", "updated_by")
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        exclude = ("skatevideosite_id", "raw_data", "updated_by")
+
+
+class ClipSerializer(serializers.ModelSerializer):
+    tracks = TrackSerializer(many=True)
+    # TODO:review
+    skaters = nested_resource(Skater, _fields=("id", "name"))(many=True)
+
+    class Meta:
+        model = Clip
+        exclude = ("skatevideosite_id", "raw_data", "updated_by")

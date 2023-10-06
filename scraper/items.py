@@ -35,10 +35,12 @@ def get_or_create(model, unique_value, unique_field="source_url", data=None):
 
 class SkaterItem(DjangoItem):
     django_model = Skater
+    resource = "skaters"
 
 
 class FilmmakerItem(DjangoItem):
     django_model = Filmmaker
+    resource = "filmmakers"
 
 
 class CompanyItem(DjangoItem):
@@ -53,9 +55,7 @@ class CompanyItem(DjangoItem):
         skaters = [Skater(source_url=url) for url in self["skaters_urls"]]
         Skater.objects.bulk_create(skaters, ignore_conflicts=True)
 
-        companies = [
-            Company(source_url=url) for url in self["similar_companies_urls"]
-        ]
+        companies = [Company(source_url=url) for url in self["similar_companies_urls"]]
         Company.objects.bulk_create(companies, ignore_conflicts=True)
 
         self.instance.save()
@@ -66,6 +66,7 @@ class CompanyItem(DjangoItem):
 
 
 class VideoItem(DjangoItem):
+    resource = "videos"
     django_model = Video
 
     # FK  fields
@@ -104,6 +105,8 @@ class VideoItem(DjangoItem):
 
 class ClipItem(DjangoItem):
     """Depends on Video"""
+
+    resource = "clips"
     django_model = Clip
     tracks = scrapy.Field()
     skaters = scrapy.Field()
@@ -112,7 +115,6 @@ class ClipItem(DjangoItem):
     def save(self, *args, **kwargs):
         skaters = []
         tracks = []
-
         video_url = self["video_url"]
         video = get_or_create(Video, video_url)
         self.instance.video = video

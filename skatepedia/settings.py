@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
     "rest_framework",
+    "rest_framework_json_api",
     "django_filters",
     "drf_spectacular",
     "drf_spectacular_sidecar",
@@ -126,7 +127,10 @@ STATIC_URL = env.str("STATIC_URL", default="/static/")
 STATIC_ROOT = os.path.join(BASE_DIR, "staticsite/staticfiles")
 
 # API configuration
+# JSON:API: https://django-rest-framework-json-api.readthedocs.io/en/stable/index.html
 REST_FRAMEWORK = {
+    "PAGE_SIZE": 10,
+    "EXCEPTION_HANDLER": "rest_framework_json_api.exceptions.exception_handler",
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
@@ -135,11 +139,27 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ],
-    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework_json_api.pagination.JsonApiPageNumberPagination",
+    "DEFAULT_PARSER_CLASSES": (
+        "rest_framework_json_api.parsers.JSONParser",
+        "rest_framework.parsers.FormParser",
+        "rest_framework.parsers.MultiPartParser",
+    ),
+    "DEFAULT_RENDERER_CLASSES": ("rest_framework_json_api.renderers.JSONRenderer",),
+    "DEFAULT_METADATA_CLASS": "rest_framework_json_api.metadata.JSONAPIMetadata",
+    "DEFAULT_FILTER_BACKENDS": (
+        "rest_framework_json_api.filters.QueryParameterValidationFilter",
+        "rest_framework_json_api.filters.OrderingFilter",
+        "rest_framework_json_api.django_filters.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+    ),
+    # 'DEFAULT_SCHEMA_CLASS': 'rest_framework_json_api.schemas.openapi.AutoSchema',
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
-    "PAGE_SIZE": 100,
+    "SEARCH_PARAM": "filter[search]",
+    "TEST_REQUEST_RENDERER_CLASSES": (
+        "rest_framework_json_api.renderers.JSONRenderer",
+    ),
+    "TEST_REQUEST_DEFAULT_FORMAT": "vnd.api+json",
 }
 
 # OpenAPI configuration

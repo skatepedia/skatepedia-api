@@ -32,7 +32,7 @@ class BaseModel(models.Model):
         return f"{self.name}" if self.name else self.source_url or str(self.id)
 
     def save(self, *args, **kwargs):
-        if self.source_url and self.__dict__.get("slug"):
+        if self.__dict__.get("slug") is None and self.source_url:
             self.slug = slugify(self.source_url.split("/")[-1])
         super().save(*args, **kwargs)
 
@@ -45,7 +45,7 @@ class Person(BaseModel):
         verbose_name=_("Profile picture"), max_length=128, null=True, blank=True
     )
     gender = models.CharField(
-        verbose_name=_("Gender"), max_length=1, null=True, blank=True, default='M'
+        verbose_name=_("Gender"), max_length=1, null=True, blank=True, default="M"
     )
     bio = models.CharField(verbose_name=_("Bio"), max_length=128, null=True, blank=True)
     year_of_birth = models.PositiveSmallIntegerField(
@@ -176,6 +176,7 @@ class Soundtrack(BaseModel):
 
 class Clip(BaseModel):
     """Skater video part or any specific video clip"""
+
     name = models.CharField(
         verbose_name=_("Name"), max_length=128, blank=True, null=True
     )

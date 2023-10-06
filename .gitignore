@@ -15,7 +15,7 @@ __pycache__
 
 # Scrapy
 *.json
-!scripts/*\/*.json
+!scripts/*/*.json
 .scrapy
 
 # Local development
@@ -38,3 +38,6 @@ staticsite/videos/*
 !staticsite/staticfiles/db/
 
 celerybeat-schedule
+
+# JS
+node_modules/

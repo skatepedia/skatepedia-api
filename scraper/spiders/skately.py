@@ -7,9 +7,9 @@ The spiders in this module know how to parse the archived content of the Skately
 Brand - Company
 Video
 Skater
-Ad
-SoundTrack
+Track
 Clip
+Spot
 """
 import re
 import json
@@ -37,6 +37,20 @@ LIBRARY_RESOURCE_TYPES = (
     "soundtracks",
     "spots",
 )
+
+
+def parse_relations(links, resources=None):
+    """Extract videos, skaters, brands from brand page."""
+    match_url = r"[\w\d:#@%/;$()~_?\+-=\\\.&]"
+    resources = resources or LIBRARY_RESOURCE_TYPES
+    return {
+        rel_type: list(set(links.re(f"{match_url}+{rel_type}+{match_url}*")))
+        for rel_type in resources
+    }
+
+
+def _first(elements):
+    return next(iter(elements), None)
 
 
 class SkatelySpider(ABC, scrapy.Spider):
@@ -82,7 +96,7 @@ def parse_brand_page(response):
     """
     response.selector.remove_namespaces()
     rel_links = response.css("#col-left > ul > li > div > a::attr(href)")
-    rels = parse_relations(rel_links, resources=['people', 'videos', 'brands'])
+    rels = parse_relations(rel_links, resources=["people", "videos", "brands"])
     data = {
         "source_url": response.url,
         "name": response.css("#lib-page-bio > h1::text").extract_first(),
@@ -116,38 +130,25 @@ def parse_people_page(response):
     response.selector.remove_namespaces()
     data = {
         "name": response.css("#lib-page-bio > h1::text").extract_first(),
-        "image": response.css("meta[property='og:image']::attr(content)").extract_first(),
+        "image": response.css(
+            "meta[property='og:image']::attr(content)"
+        ).extract_first(),
         "bio": response.css("meta[name='description']::attr(content)").extract_first(),
         "source_url": response.url,
     }
     labels = response.css("#lib-page-bio > ul > li > strong::text").extract()
     values = response.css("#lib-page-bio > ul > li::text").extract()
 
-
     for label, value in zip(labels, values):
         with suppress(AttributeError):
             if label == "Born:":
-                data['year_of_birth'] = re.search('\d{4}', value).group(0)
+                data["year_of_birth"] = re.search("\d{4}", value).group(0)
             elif label == "Stance:":
-                data['stance'] = value.strip()
+                data["stance"] = value.strip()
             elif label == "Hometown:":
-                data['city'] = value.strip()
+                data["city"] = value.strip()
 
     yield SkaterItem(**data)
-
-
-def parse_relations(links, resources=None):
-    """Extract videos, skaters, brands from brand page."""
-    match_url = r"[\w\d:#@%/;$()~_?\+-=\\\.&]"
-    resources = resources or LIBRARY_RESOURCE_TYPES
-    return {
-        rel_type: set(links.re(f"{match_url}+{rel_type}+{match_url}*"))
-        for rel_type in resources
-    }
-
-
-def _first(elements):
-    return next(iter(elements), None)
 
 
 def parse_clips(clips, video_url):
@@ -225,7 +226,7 @@ def parse_video_page(response):
         "source_url": response.url,
     }
 
-    data["raw_data"] = {**data, **rels}
+    data["raw_data"] = {**data}
     clip_items = parse_clips(clip_data, response.url)
 
     for item in (VideoItem(**data), *clip_items):
@@ -271,6 +272,7 @@ def parse_soundtrack_page(response):
 
 class PeopleSpider(SkatelySpider):
     """Parse Skately people library."""
+
     name = "skately-people"
     resource = "people"
     pages = range(2, 54)
@@ -284,6 +286,7 @@ class SpotSpider(SkatelySpider):
 
     https://web.archive.org/web/20170619231904/http://skately.com/library/spots/7th-street-elementary-school
     """
+
     name = "skately-spots"
     resource = "spots"
     pages = range(2, 5)
@@ -297,6 +300,7 @@ class BrandSpider(SkatelySpider):
 
     https://web.archive.org/web/20190715034702/http://skately.com/library/brands/blind-skateboards
     """
+
     name = "skately-brands"
     resource = "brands"
 

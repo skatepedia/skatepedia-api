@@ -1,9 +1,11 @@
 Django==4.1.7
-django-filter
 drf-nested-routers
 django-environ==0.10.0
 djangorestframework==3.14.0
 drf-spectacular[sidecar]
+djangorestframework-jsonapi
+#djangorestframework-jsonapi[openapi]
+djangorestframework-jsonapi[django-filter]
 Scrapy==2.8.0
 scrapy-djangoitem==1.1.1
 psycopg2-binary==2.9.5
